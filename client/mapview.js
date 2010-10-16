@@ -1,7 +1,6 @@
+user={};
+user.entity_id = 1337;
 
-
-    user={};
-    user.entity_id = 1337;
 $(document).ready(function() {
     var c=0;
     var e = [];

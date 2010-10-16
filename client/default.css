@@ -1,6 +1,12 @@
 body {
 	background: #22252a;
-	
+	margin: 0px;
+    padding: 0px;
+}
+
+div {
+    font-family: Helvetica, Verdana;
+    font-size: 12px;
 }
 
 .mapcell {
@@ -55,4 +61,17 @@ body {
 	color: #ababab;
 	font-size: 10px;
 	font-family: sans-serif;
+}
+
+#login-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+    margin-left: auto;
+    margin-right: auto;
+    
+    background-color: #000000;
+    color: #ffffff;
+    z-index: 9001;
 }

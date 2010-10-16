@@ -1,7 +1,7 @@
 body {
-	background: #22252a;
-	margin: 0px;
-    padding: 0px;
+    background: #22252a;
+    margin: 0px;
+    padding: 50px;
     color: #FFFFFF;
 }
 
@@ -10,67 +10,92 @@ div {
     font-size: 12px;
 }
 
-.mapcell {
-	background: #32353a;
-	border-right: 1px dashed #afafaf;
-	border-top: 1px dashed #afafaf;
+#mini-map{
+    float: left;
+    width: 500px;
+}
 
-	width: 20px;
-	height: 20px;
-	
-	line-height: 10px;
-	
-	padding: 0px;
-	
-	color: #a2a5aa;
-	
-	font-size: 18px;
+#chat{
+    width: 300px;
+    height: 460px;
+    float: left;
+}
+
+#chat_box{
+    width: 300px;
+    height: 420px;
+    background-color: #777777;
+}
+
+#chat_title{
+    padding: 10px;
+    background-color: #000000;
+}
+
+#chat_input{
+    width: 300px;
+}
+
+.mapcell {
+    background: #32353a;
+    border-right: 1px dashed #afafaf;
+    border-top: 1px dashed #afafaf;
+    
+    width: 20px;
+    height: 20px;
+    
+    line-height: 10px;
+    
+    padding: 0px;
+    
+    color: #a2a5aa;
+    
+    font-size: 18px;
 }
 
 .mapcell-left {
-	border-left: 1px dashed #afafaf;
-	border-right: 1px dashed #afafaf;
-	border-top: 1px dashed #afafaf;
+    border-left: 1px dashed #afafaf;
+    border-right: 1px dashed #afafaf;
+    border-top: 1px dashed #afafaf;
 }
 
 .mapcell-bottom {
-	border-bottom: 1px dashed #afafaf;
-	border-right: 1px dashed #afafaf;
-	border-top: 1px dashed #afafaf;
+    border-bottom: 1px dashed #afafaf;
+    border-right: 1px dashed #afafaf;
+    border-top: 1px dashed #afafaf;
 }
 
 .mapcell-selected {
-	background: #62656a;
+    background: #62656a;
 }
 
 .mapcell-player {
-  background: #7E8BDE;
+    background: #7E8BDE;
 }
 
 #overlay {
-	position: absolute;
-	
-	background: #ff0000;
-	
-	width: 265px;
-	height: 265px;
-
-	opacity: 0.2;
+    position: absolute;
+    
+    background: #ff0000;
+    
+    width: 265px;
+    height: 265px;
+    
+    opacity: 0.2;
 }
 
 #map-output {
-	color: #ababab;
-	font-size: 10px;
-	font-family: sans-serif;
+    color: #ababab;
+    font-size: 10px;
+    font-family: sans-serif;
 }
 
 #login-overlay {
     position: absolute;
     width: 100%;
     height: 100%;
-    
-    margin-left: auto;
-    margin-right: auto;
+    left: 0px;
+    top: 0px;
     
     background-color: #000000;
     color: #ffffff;

@@ -1,13 +1,38 @@
 Game = function() {
-  sid = null;
-  name = null;
+  this.sid = null;
+  this.eid = null;
+  this.name = null;
   
-  mapview = null;
+  this.mapview = null;
+  
+  this.loginSuccess = new Event();
 }
 
 Game.prototype.login = function(username) {
-  $.get('/user/login?name='+username, function(data) {
+  var self = this;
+  $.get('/user/join?name='+username, function(data) {
+    data = eval('['+data+']')[0];
+    self.loginSuccess.fire();
+    self.sid = data.session_id;
+    self.eid = data.entity_id;
+    
+    $.get('/map/dump?sid='+self.sid, function(data) {
+      self.mapview = new MapView($('#mini-map'), null, 21, 21);
+      self.stateSync(data);
+      
+      self.mapview.createTable();
+    });
   }, 'json');
+}
+
+Game.prototype.stateSync = function(data) {
+  data = '['+data+']';
+  data = eval(data)[0];
+
+  var terrain = eval(data.terrain);
+  var entities = eval('['+data.entities+']')[0];
+  
+  this.mapview.terrain = terrain;
 }
 
 Game.prototype.beginPolling = function() {

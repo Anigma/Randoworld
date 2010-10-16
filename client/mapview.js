@@ -1,7 +1,7 @@
 user={};
 user.entity_id = 1337;
 
-$(document).ready(function() {
+/*$(document).ready(function() {
     
     map = new MapView($('#mini-map'),mapdata, 21, 21);
 
@@ -14,7 +14,7 @@ $(document).ready(function() {
     map.updateTable();
     
     bindEvents(map,user);
-})
+})*/
 
 bindEvents = function(map,user) {
     $(document).keypress(function(e){
@@ -145,6 +145,10 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
             }
         }
     }
+}
+
+MapView.prototype.setTerrain = function(terrain) {
+  this.terrain = terrain;
 }
 
 MapView.prototype.init = function() {

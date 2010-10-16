@@ -7,8 +7,8 @@ var MINI_MAP_HEIGHT = 24;
 $(document).ready(function() {
   initMap($('#map'), {height: MAP_HEIGHT, width: MAP_WIDTH});
 	initMap($('#mini-map'), {height: MINI_MAP_HEIGHT, width: MINI_MAP_WIDTH});
-	$('#mini-map').attr('xpos', '0');
-	$('#mini-map').attr('ypos', '0');
+	//$('#mini-map').attr('xpos', '0');
+	//$('#mini-map').attr('ypos', '0');
 	
 	$('#mapdiv').css('width', MAP_WIDTH * 13);
 	
@@ -50,23 +50,24 @@ function bindEvents() {
 }
 
 function initMap(out, size) {
-	var map = '';
-
+    var rows = []
 	for (var y = 0;y < size.height;y++) {
-		map += '<tr class="maprow">';
+        var row = $(document.createElement('tr')).addClass('maprow')
 		for (var x = 0;x < size.width;x++) {
-			var classes = 'mapcell';
-			if (y == size.height-1) classes += ' mapcell-bottom';
-			if (x == 0) classes += ' mapcell-left';
-			if (mapdata[y][x] == 1) classes += ' mapcell-selected';
-			map += '<td class="'+classes+'" xpos="'+x+'" ypos="'+y+'">&nbsp;</td>';
+            var cell = $(document.createElement('td')).addClass('mapcell')
+            
+			if (y == size.height-1) cell.addClass('mapcell-bottom');
+			if (x == 0) cell.addClass('mapcell-left');
+			if (mapdata[y][x] == 1) cell.addClass('mapcell-selected');
+            cell.html('&nbsp;');
+            row.append(cell);
 		}
-		map += '</tr>';
+        rows.push(row);
 	}
 	
-	out.html(map);
-	out.attr('mapheight', size.height);
-	out.attr('mapwidth', size.width);
+	out.append(rows);
+	//out.attr('mapheight', size.height);
+	//out.attr('mapwidth', size.width);
 }
 
 function spawnPlayer(map, location) {

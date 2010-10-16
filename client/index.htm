@@ -4,14 +4,19 @@
 	<title>ASCII Map</title>
 	<link rel="stylesheet" href="default.css">
 	<script src="jquery.js"></script>
+	<script src="mapview.js"></script>
+    <!--
 	<script src="testmap.js"></script>
-	<script src="clientmap.js"></script>
+	<script src="clientmap.js"></script>-->
 </head>
 
 <body>
 	<div style="float: left" id="mapdiv">
-		<table id="map" cellspacing="0">
+		<table id="map?" cellspacing="0">
 		</table>
+        
+        <div id="map"></div>
+        
 		
 		<div id="output-controls" style="float: top">
 			<input type="button" id="dump" value="Dump Map">
@@ -25,8 +30,9 @@
 	</div>
 	
 	<div>
-		<table id="mini-map" cellspacing="0" >
+		<table id="mini-map?" cellspacing="0" >
 		</table>
+        <div id="mini-map"></div>
 		
 		<input type="button" id="up" value="Up">
 		<input type="button" id="down" value="Down">

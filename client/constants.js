@@ -2,6 +2,7 @@ var TERRAIN_TYPES = {
   WALL: 1,
   DIRT: 0, 
   STONE: 2,
+  SPAWN: 3,
   BLANK: 9999
 };
 

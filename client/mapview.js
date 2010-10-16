@@ -2,15 +2,6 @@ user={};
 user.entity_id = 1337;
 
 $(document).ready(function() {
-    var c=0;
-    var e = [];
-    for(var i = 0;i < 40; i++) {
-        var t = [];
-        for(var j = 0; j < 40; j++) {
-            t.push(c++ % 40);
-        }
-        e.push(t);
-    }
     
     map = new MapView($('#mini-map'),mapdata, 21, 21);
 

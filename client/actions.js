@@ -7,6 +7,7 @@ $(document).ready(function(){
                 if (!data.error) {
                     $('#login-console').append('Login successful');
                     game.sid = data.sid;
+		                $('#login-overlay').fadeOut();
                 }
             }, 'JSON');
         }

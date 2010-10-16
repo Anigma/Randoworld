@@ -66,7 +66,7 @@ server.get('/user/act', function(req, res) {
               res.simpleJson(200, {error: 'CANNOT_UPDATE_ENTITY'});
               return;
             }
-            sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: -1, y: 0} });
+            sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 0, y: -1} });
             res.simpleJson(200, {result: 'success'});
             break;
           case constants.DIRECTIONS.SOUTH:
@@ -74,7 +74,7 @@ server.get('/user/act', function(req, res) {
               res.simpleJson(200, {error: 'CANNOT_UPDATE_ENTITY'});
               return;
             }
-            sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 1, y: 0} });
+            sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 0, y: 1} });
             res.simpleJson(200, {result: 'success'});
             break;
           case constants.DIRECTIONS.EAST:
@@ -82,7 +82,7 @@ server.get('/user/act', function(req, res) {
               res.simpleJson(200, {error: 'CANNOT_UPDATE_ENTITY'});
               return;
             }
-            sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 0, y: 1} });
+            sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 1, y: 0} });
             res.simpleJson(200, {result: 'success'});
             break;
           case constants.DIRECTIONS.WEST:
@@ -90,7 +90,7 @@ server.get('/user/act', function(req, res) {
               res.simpleJson(200, {error: 'CANNOT_UPDATE_ENTITY'});
               return;
             }
-            sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 0, y: -1} });
+            sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: -1, y: 0} });
             res.simpleJson(200, {result: 'success'});
             break;
           default:

@@ -1,0 +1,57 @@
+body {
+	background: #22252a;
+}
+
+.mapcell {
+	background: #32353a;
+	border-right: 1px dashed #afafaf;
+	border-top: 1px dashed #afafaf;
+
+	width: 10px;
+	height: 10px;
+	
+	line-height: 10px;
+	
+	padding: 0px;
+	
+	color: #a2a5aa;
+	
+	font-size: 8px;
+}
+
+.mapcell-left {
+	border-left: 1px dashed #afafaf;
+	border-right: 1px dashed #afafaf;
+	border-top: 1px dashed #afafaf;
+}
+
+.mapcell-bottom {
+	border-bottom: 1px dashed #afafaf;
+	border-right: 1px dashed #afafaf;
+	border-top: 1px dashed #afafaf;
+}
+
+.mapcell-selected {
+	background: #62656a;
+}
+
+.mapcell-player {
+  background: #7E8BDE;
+}
+
+#overlay {
+	position: absolute;
+	
+	background: #ff0000;
+	
+	width: 265px;
+	height: 265px;
+
+	opacity: 0.2;
+}
+
+#map-output {
+	color: #ababab;
+	font-size: 10px;
+	font-family: sans-serif;
+}

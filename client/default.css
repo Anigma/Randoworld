@@ -89,20 +89,29 @@ div {
     font-size: 12px;
 }
 
+#title-bar {
+  margin: 20px 50px 0px 70px;
+  font-size: 24px;
+}
+
 #mini-map{
     float: left;
     width: 500px;
+    margin: 10px 50px 50px 50px;
 }
 
 #chat{
+    margin-top: -40px;
+    margin-left: -80px;
+
     width: 300px;
-    height: 460px;
+    height: 760px;
     float: left;
 }
 
 #chat_box{
     width: 300px;
-    height: 420px;
+    height: 480px;
     background-color: #777777;
 }
 
@@ -120,8 +129,8 @@ div {
     border-right: 1px dashed #afafaf;
     border-top: 1px dashed #afafaf;
     
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     
     line-height: 10px;
     
@@ -129,7 +138,8 @@ div {
     
     color: #a2a5aa;
     
-    font-size: 18px;
+    font-size: 16px;
+    border: none;
 }
 
 .mapcell-left {
@@ -149,7 +159,12 @@ div {
 }
 
 .mapcell-player {
-    background: #7E8BDE;
+    background: blue;
+    color: white;
+}
+
+.mapcell-enemy {
+  color: red;
 }
 
 #overlay {
@@ -179,4 +194,47 @@ div {
     background-color: #000000;
     color: #ffffff;
     z-index: 9001;
+}
+
+#unitframe {
+  position: fixed;
+  
+  background-color: #6e442f;
+  height: 60px;
+  width: 400px;
+  
+  bottom: 15px;
+  left: 38px;
+}
+
+.unitframe-row {
+  height: 30px;
+
+}
+
+.unitframe-label {
+  position: relative;
+  right: 0px;
+
+  font-size: 26px;
+  width: 50px;
+  text-align: right;
+}
+
+.unitframe-bar {
+  height: 20px;
+  width: 340px;
+  
+  margin: 5px 5px 0px 5px;
+  
+  background-color: #0f0f0f;
+  float: left;
+}
+
+#hpbar {
+  background-color: #e81c29;
+}
+
+#mpbar {
+  background-color: #1c15eb;
 }

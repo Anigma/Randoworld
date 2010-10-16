@@ -15,44 +15,21 @@
 })*/
 
 validMove = function(x,y,terrain) {
-	return 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
+
+	var validTerrain = 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
+
+  console.log('d....');	
+  for (var i in this.entities) {
+    var entity = this.entities[i];
+    console.log(entity);
+    if (entity.location.x == x && entity.location.y == y)
+      return false;
+  }
+  
+  return validTerrain;
 }
 
-bindEvents = function(map) {
-  var self = this;
-  $(document).keypress(function(e){
-	  if (e.keyCode) keycode=e.keyCode;
-	  else keycode=e.which;
-	  ch=String.fromCharCode(keycode);
-	  var entity = game.mapview.entities[game.eid];
-	
-	  if(ch=='w') {
-		if(validMove(entity.location.x,entity.location.y - 1,game.mapview.terrain)) {
-			map.message(game.eid,{x:0,y:-1});
-			map.selfMove.fire({direction: DIRECTIONS.NORTH});
-		}
-	  }
-	  else if(ch=='s') {
-		if(validMove(entity.location.x,entity.location.y + 1,game.mapview.terrain)) {
-			map.message(game.eid,{x:0,y:1});
-			map.selfMove.fire({direction: DIRECTIONS.SOUTH});
-		}
-	  }
-	  else if(ch=='a') {
-		if(validMove(entity.location.x - 1,entity.location.y,game.mapview.terrain)) {
-			map.message(game.eid,{x:-1,y:0});
-			map.selfMove.fire({direction: DIRECTIONS.WEST});
-		}
-    }
-	  else if(ch=='d') {
-		if(validMove(entity.location.x + 1,entity.location.y,game.mapview.terrain)) {
-			map.message(game.eid,{x:1,y:0});
-			map.selfMove.fire({direction: DIRECTIONS.EAST});
-		}
-	  }
-  });
-    
-}
+
 
 BLANK = "#";
 
@@ -70,6 +47,77 @@ MapView = function(container, terrain, height, width) {
     this.selfMove = new Event();
 }
 
+MapView.prototype.validMove = function(x,y,terrain) {
+
+	var validTerrain = 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
+
+  console.log('d....');	
+  for (var i in this.entities) {
+    var entity = this.entities[i];
+    console.log(entity);
+    if (entity.location.x == x && entity.location.y == y) {
+      if (entity.type == ENTITY_TYPES.ENEMY;
+        return entity.id;
+      else
+        return false;
+    }
+  }
+  
+  return validTerrain;
+}
+
+MapView.prototype.bindEvents = function() {
+  var self = this;
+  $(document).keypress(function(e){
+	  if (e.keyCode) keycode=e.keyCode;
+	  else keycode=e.which;
+	  ch=String.fromCharCode(keycode);
+	  var entity = game.mapview.entities[game.eid];
+	  var targetEntityId = null;
+	
+	  if(ch=='w') {
+	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) >= 0) {
+	    var targetEntity = self.entities[targetEntityId];
+	    $.get('/user/act?action=attack&sid='+game.sid+'entity='+targetEntityId);
+	  }
+		if(self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) {
+			self.message(game.eid,{x:0,y:-1});
+			self.selfMove.fire({direction: DIRECTIONS.NORTH});
+		}
+	  }
+	  else if(ch=='s') {
+	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) >= 0) {
+  	  var targetEntity = self.entities[targetEntityId];
+  	  $.get('/user/act?action=attack&sid='+game.sid+'entity='+targetEntityId);
+	  }
+		if(self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) {
+			self.message(game.eid,{x:0,y:1});
+			self.selfMove.fire({direction: DIRECTIONS.SOUTH});
+		}
+	  }
+	  else if(ch=='a') {
+	  if((targetEntityId = self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) >= 0) {
+	    var targetEntity = self.entities[targetEntityId];
+	    $.get('/user/act?action=attack&sid='+game.sid+'entity='+targetEntityId);
+	  }
+		if(self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) {
+			self.message(game.eid,{x:-1,y:0});
+			self.selfMove.fire({direction: DIRECTIONS.WEST});
+		}
+    }
+	  else if(ch=='d') {
+	  if((targetEntityId = self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) >= 0) {
+	    var targetEntity = self.entities[targetEntityId];
+	    $.get('/user/act?action=attack&sid='+game.sid+'entity='+targetEntityId);
+	  }
+		if(self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) {
+			self.message(game.eid,{x:1,y:0});
+			self.selfMove.fire({direction: DIRECTIONS.EAST});
+		}
+	  }
+  });
+}
+
 MapView.prototype.createTable = function() {
     var jtable = $(document.createElement('table'))
     this.table = [];
@@ -80,7 +128,7 @@ MapView.prototype.createTable = function() {
         
 		for (var x = 0;x < this.width;x++) {
             var jcell = $(document.createElement('td')).addClass('mapcell')
-            jcell.html(this.terrain[y][x]);
+            //jcell.html(this.terrain[y][x]);
             
 			if (y == this.height-1) jcell.addClass('mapcell-bottom');
 			if (x == 0) jcell.addClass('mapcell-left');
@@ -101,7 +149,6 @@ MapView.prototype.scrollTable = function(newx,newy) {
 }
 
 MapView.prototype.message = function(entity_id, locationDelta) {
-  console.log(entitiy_id);
     if (this.entities[entity_id]) {
       this.entities[entity_id].location.x += locationDelta.x;
       this.entities[entity_id].location.y += locationDelta.y;
@@ -150,26 +197,32 @@ MapView.prototype.drawEntities = function(entities) {
             else {
                 var type;
 				if(game.eid == e.id) {
-					type = "h";
+					type = "@";
 				}
 				else if(e.type == ENTITY_TYPES.PLAYER) {
-					type = "p";
+					type = "%";
 				}
 				else if(e.type == ENTITY_TYPES.ENEMY) {
-					type = "m";
+					type = "&";
 				}
 				else {
 					type = "u";
 				}
+				
+				//console.log('one entity drawn');
 
-				this.table[ypos][xpos].html(type);
-		
-				if(this.table[ypos][xpos].html() == "m")
-					this.table[ypos][xpos].css("background-color", "red");
-				if(this.table[ypos][xpos].html() == "h")
-					this.table[ypos][xpos].css("background-color", "blue");
-				if(this.table[ypos][xpos].html() == "p")
+				this.table[ypos][xpos].text(type);
+				
+				if(this.table[ypos][xpos].text() == "&") {
+					this.table[ypos][xpos].addClass('mapcell-enemy');
+				}
+				if(this.table[ypos][xpos].text() == "@") {
+					//this.table[ypos][xpos].css("background-color", "blue");
+					this.table[ypos][xpos].addClass('mapcell-player');
+			  }
+				if(this.table[ypos][xpos].text() == "%") {
 					this.table[ypos][xpos].css("background-color", "green");
+				}
             }
         }
     }
@@ -183,26 +236,28 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
         for(var x = 0; x < this.width; x++) {
             var terrainY = y + ypos;
             var terrainX = x + xpos;
+            this.table[y][x].text('');
             if(terrainY < 0 || terrainY >= this.terrain.length
                 || terrainX < 0 || terrainX >= this.terrain[0].length) {
                 
-                this.table[y][x].text(BLANK);
+                //this.table[y][x].text(BLANK);
 				this.table[y][x].css("background-color", "black");
                 
             }
             else {
-                this.table[y][x].text(this.terrain[terrainY][terrainX]);
-				if(this.table[y][x].html() == 0)
-					this.table[y][x].css("background-color", "gray");
-				if(this.table[y][x].html() == 1)
-					this.table[y][x].css("background-color", "white");
-            }
+                //this.table[y][x].text(this.terrain[terrainY][terrainX]);
+				        if(this.terrain[terrainY][terrainX] == 0)
+					        this.table[y][x].css("background-color", "gray");
+				        if(this.terrain[terrainY][terrainX] == 1)
+					        this.table[y][x].css("background-color", "white");
+                    }
         }
     }
 }
 
-MapView.prototype.setTerrain = function(terrain) {
-  this.terrain = terrain;
+MapView.prototype.addEntity = function(entity) {
+  this.entities[entity.id] = entity;
+  this.updateTable();
 }
 
 MapView.prototype.init = function() {

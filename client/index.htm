@@ -23,13 +23,24 @@
         </div>
     </div>
     <div id="main">
-        <h1>RandoWorld!</h1>
+        <div id="title-bar">RandoWorld!</div>
         <div id="mini-map"></div>
         <div id="chat">
-	    <div id="chat_box">
-	        <h2 id="chat_title">Chat</h2>
-	    </div>
-	    <input type="text" id="chat_input"/>
+	        <div id="chat_box">
+	          <h2 id="chat_title">Chat</h2>
+    	    </div>
+    	    <input type="text" id="chat_input"/>
+        </div>
+        <br>
+        <div id="unitframe">
+          <div class="unitframe-row">
+            <span class="unitframe-label">HP</span>
+            <div id="hpbar" class="unitframe-bar">&nbsp;</div>
+          </div>
+          <div class="unitframe-row">
+            <span class="unitframe-label">MP</span>
+            <div id="mpbar" class="unitframe-bar"></div>
+          </div>
         </div>
     </div>
 </body>

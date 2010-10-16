@@ -39,8 +39,8 @@ server.get('/broadcast', function(req, res) {
   var params = url.parse(req.url, true).query;
   
   if (params.user_id && params.msg) {
-    sessionManager.broadcast({msg:'test'});
-    res.simpleResponse(200);
+    sessionManager.broadcast({msg:params.msg});
+    res.simpleText(200, '');
   }
   else {
     res.simpleJson(200, {error: 'USERID_REQUIRED'});

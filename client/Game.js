@@ -24,7 +24,6 @@ Game.prototype.login = function(username) {
       self.mapview = new MapView($('#mini-map'), null, 21, 21);
       self.stateSync(data);
       
-      self.mapview.createTable();
     });
   }, 'json');
 }
@@ -34,13 +33,13 @@ Game.prototype.stateSync = function(data) {
   data = eval(data)[0];
 
   var terrain = eval(data.terrain);
-  var entities = eval('['+data.entities+']')[0][0];
-  
-  console.log(entities);
+  var entities = eval('['+data.entities+']')[0];
   
   this.mapview.terrain = terrain;
   this.mapview.entities = entities;
+  this.mapview.createTable();
 	this.mapview.updateTable();
+	bindEvents(this.mapview);
 }
 
 Game.prototype.beginPolling = function() {

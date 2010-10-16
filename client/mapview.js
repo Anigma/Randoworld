@@ -1,5 +1,3 @@
-user={};
-user.entity_id = 1337;
 
 /*$(document).ready(function() {
     
@@ -16,16 +14,16 @@ user.entity_id = 1337;
     bindEvents(map,user);
 })*/
 
-bindEvents = function(map,user) {
+bindEvents = function(map) {
     $(document).keypress(function(e){
 	if (e.keyCode) keycode=e.keyCode;
 	else keycode=e.which;
 	ch=String.fromCharCode(keycode);
 	
-	if(ch=='w') 		map.message({type:"scrolly",id:user.entity_id,data:-1});
-	else if(ch=='s') 	map.message({type:"scrolly",id:user.entity_id,data:1});
-	else if(ch=='a') 	map.message({type:"scrollx",id:user.entity_id,data:-1});
-	else if(ch=='d') 	map.message({type:"scrollx",id:user.entity_id,data:1});
+	if(ch=='w') 		map.message({type:"scrolly",id:game.eid,data:-1});
+	else if(ch=='s') 	map.message({type:"scrolly",id:game.eid,data:1});
+	else if(ch=='a') 	map.message({type:"scrollx",id:game.eid,data:-1});
+	else if(ch=='d') 	map.message({type:"scrollx",id:game.eid,data:1});
     });
     
 }
@@ -88,7 +86,8 @@ MapView.prototype.message = function(message) {
 }
 
 MapView.prototype.updateTable = function() {
-    this.centerOnEntity(this.entities[user.entity_id]);
+	console.log(this.entities);
+    this.centerOnEntity(this.entities[game.eid]);
     this.drawEntities(this.entities);
 }
 

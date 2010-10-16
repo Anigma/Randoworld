@@ -12,20 +12,30 @@ $(document).ready(function() {
         e.push(t);
     }
     
-    map = new MapView($('#mini-map'),e, 21, 21);
+    map = new MapView($('#mini-map'),mapdata, 21, 21);
 
     map.createTable();
     map.repositionTable(-1,-1);
     
-    e = {1:{id:1,s:"r",x:0,y:1}, 0:{id:0,s:"m",x:1,y:2},
-        1337 :{id:user.entity_id,s:"H",x:5,y:4}};
-    map.entities = e;
+    entities = {1:{id:1,s:"m",x:0,y:1}, 0:{id:0,s:"m",x:1,y:2},
+        1337 :{id:user.entity_id,s:"p",x:5,y:4}};
+    map.entities = entities;
     map.updateTable();
     
     bindEvents(map,user);
 })
 
 bindEvents = function(map,user) {
+    $(document).keypress(function(e){
+	if (e.keyCode) keycode=e.keyCode;
+	else keycode=e.which;
+	ch=String.fromCharCode(keycode);
+	
+	if(ch=='w') 		map.message({type:"scrolly",id:user.entity_id,data:-1});
+	else if(ch=='s') 	map.message({type:"scrolly",id:user.entity_id,data:1});
+	else if(ch=='a') 	map.message({type:"scrollx",id:user.entity_id,data:-1});
+	else if(ch=='d') 	map.message({type:"scrollx",id:user.entity_id,data:1});
+    });
     $('#up').click(function(){
         //map.scrollTable(0,-1)
         map.message({type:"scrolly",id:user.entity_id,data:-1});
@@ -106,7 +116,6 @@ MapView.prototype.message = function(message) {
 }
 
 MapView.prototype.updateTable = function() {
-    console.log(this.entities);
     this.centerOnEntity(this.entities[user.entity_id]);
     this.drawEntities(this.entities);
 }
@@ -130,6 +139,11 @@ MapView.prototype.drawEntities = function(entities) {
             }
             else {
                 this.table[ypos][xpos].html(e.s);
+		
+		if(this.table[ypos][xpos].html() == "m")
+		    this.table[ypos][xpos].css("background-color", "red");
+		if(this.table[ypos][xpos].html() == "p")
+		    this.table[ypos][xpos].css("background-color", "green");
             }
         }
     }
@@ -147,10 +161,15 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
                 || terrainX < 0 || terrainX >= this.terrain[0].length) {
                 
                 this.table[y][x].html(BLANK);
+		this.table[y][x].css("background-color", "black");
                 
             }
             else {
                 this.table[y][x].html(this.terrain[terrainY][terrainX]);
+		if(this.table[y][x].html() == 0)
+		    this.table[y][x].css("background-color", "gray");
+		if(this.table[y][x].html() == 1)
+		    this.table[y][x].css("background-color", "white");
             }
         }
     }

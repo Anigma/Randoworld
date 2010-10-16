@@ -16,6 +16,8 @@ var tileManager = tileMgr.TileManager();
 tileManager.generateMap();
 
 server.get('/', fu.staticHandler('client/index.htm'));
+server.get('/default.css', fu.staticHandler('client/default.css'));
+server.get('/actions.js', fu.staticHandler('client/actions.js'));
 server.get('/jquery.js', fu.staticHandler('client/jquery.js'));
 
 server.get('/user/join', function(req, res) {

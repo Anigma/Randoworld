@@ -100,7 +100,17 @@ MapView.prototype.scrollTable = function(newx,newy) {
     this.repositionTable(newx,newy);
 }
 
-MapView.prototype.message = function(message) {
+MapView.prototype.message = function(entity_id, locationDelta) {
+    if (this.entities[entity_id]) {
+      this.entities[entity_id].x += locationDelta.x;
+      this.entities[entity_id].y += locationDelta.y;
+      
+      this.updateTable();
+      return true;
+    }
+    return false;
+
+    /*
     if(message.type == "scrollx") {
         var e = this.entities[message.id];
         e.location.x += message.data;
@@ -111,6 +121,7 @@ MapView.prototype.message = function(message) {
         e.location.y += message.data;
         this.updateTable();
     }
+    */
 }
 
 MapView.prototype.updateTable = function() {

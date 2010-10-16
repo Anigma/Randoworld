@@ -61,6 +61,7 @@ Game.prototype.handlePollResponse = function(data) {
   if (!data.error) {
     switch (data.action) {
       case 'entity_moved':
+        this.mapview.message(data.entity_id, data.locationDelta);
         break;
       case 'state_sync':
         break;

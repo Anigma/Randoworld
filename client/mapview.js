@@ -28,25 +28,25 @@ bindEvents = function(map) {
 	
 	  if(ch=='w') {
 		if(validMove(entity.location.x,entity.location.y - 1,game.mapview.terrain)) {
-			map.message({type:"scrolly",id:game.eid,data:-1});
+			map.message(game.eid,{x:0,y:-1});
 			map.selfMove.fire({direction: DIRECTIONS.NORTH});
 		}
 	  }
 	  else if(ch=='s') {
 		if(validMove(entity.location.x,entity.location.y + 1,game.mapview.terrain)) {
-			map.message({type:"scrolly",id:game.eid,data:1});
+			map.message(game.eid,{x:0,y:1});
 			map.selfMove.fire({direction: DIRECTIONS.SOUTH});
 		}
 	  }
 	  else if(ch=='a') {
 		if(validMove(entity.location.x - 1,entity.location.y,game.mapview.terrain)) {
-			map.message({type:"scrollx",id:game.eid,data:-1});
+			map.message(game.eid,{x:-1,y:0});
 			map.selfMove.fire({direction: DIRECTIONS.WEST});
 		}
     }
 	  else if(ch=='d') {
 		if(validMove(entity.location.x + 1,entity.location.y,game.mapview.terrain)) {
-			map.message({type:"scrollx",id:game.eid,data:1});
+			map.message(game.eid,{x:1,y:0});
 			map.selfMove.fire({direction: DIRECTIONS.EAST});
 		}
 	  }
@@ -103,8 +103,8 @@ MapView.prototype.scrollTable = function(newx,newy) {
 MapView.prototype.message = function(entity_id, locationDelta) {
   console.log(entitiy_id);
     if (this.entities[entity_id]) {
-      this.entities[entity_id].x += locationDelta.x;
-      this.entities[entity_id].y += locationDelta.y;
+      this.entities[entity_id].location.x += locationDelta.x;
+      this.entities[entity_id].location.y += locationDelta.y;
       
       this.updateTable();
       return true;
@@ -186,16 +186,16 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
             if(terrainY < 0 || terrainY >= this.terrain.length
                 || terrainX < 0 || terrainX >= this.terrain[0].length) {
                 
-                this.table[y][x].html(BLANK);
-		this.table[y][x].css("background-color", "black");
+                this.table[y][x].text(BLANK);
+				this.table[y][x].css("background-color", "black");
                 
             }
             else {
-                this.table[y][x].html(this.terrain[terrainY][terrainX]);
-		if(this.table[y][x].html() == 0)
-		    this.table[y][x].css("background-color", "gray");
-		if(this.table[y][x].html() == 1)
-		    this.table[y][x].css("background-color", "white");
+                this.table[y][x].text(this.terrain[terrainY][terrainX]);
+				if(this.table[y][x].html() == 0)
+					this.table[y][x].css("background-color", "gray");
+				if(this.table[y][x].html() == 1)
+					this.table[y][x].css("background-color", "white");
             }
         }
     }

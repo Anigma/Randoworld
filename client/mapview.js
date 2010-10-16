@@ -1,4 +1,5 @@
 
+
     user={};
     user.entity_id = 1337;
 $(document).ready(function() {
@@ -36,25 +37,6 @@ bindEvents = function(map,user) {
 	else if(ch=='a') 	map.message({type:"scrollx",id:user.entity_id,data:-1});
 	else if(ch=='d') 	map.message({type:"scrollx",id:user.entity_id,data:1});
     });
-    $('#up').click(function(){
-        //map.scrollTable(0,-1)
-        map.message({type:"scrolly",id:user.entity_id,data:-1});
-	});
-	
-	$('#down').click(function(){
-        //map.scrollTable(0,1)
-        map.message({type:"scrolly",id:user.entity_id,data:1});
-	});
-	
-	$('#left').click(function(){
-        //map.scrollTable(-1,0)
-        map.message({type:"scrollx",id:user.entity_id,data:-1});
-	});
-	
-	$('#right').click(function(){
-        //map.scrollTable(1,0)
-        map.message({type:"scrollx",id:user.entity_id,data:1});
-	});
     
 }
 

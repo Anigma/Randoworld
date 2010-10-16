@@ -109,12 +109,28 @@ MapView.prototype.drawEntities = function(entities) {
                 // do nothing?
             }
             else {
-                this.table[ypos][xpos].html(e.type);
+                var type;
+				if(game.eid == e.id) {
+					type = "h";
+				}
+				else if(e.type == ENTITY_TYPES.PLAYER) {
+					type = "p";
+				}
+				else if(e.type == ENTITY_TYPES.ENEMY) {
+					type = "m";
+				}
+				else {
+					type = "u";
+				}
+
+				this.table[ypos][xpos].html(type);
 		
-		if(this.table[ypos][xpos].html() == "m")
-		    this.table[ypos][xpos].css("background-color", "red");
-		if(this.table[ypos][xpos].html() == "p")
-		    this.table[ypos][xpos].css("background-color", "green");
+				if(this.table[ypos][xpos].html() == "m")
+					this.table[ypos][xpos].css("background-color", "red");
+				if(this.table[ypos][xpos].html() == "h")
+					this.table[ypos][xpos].css("background-color", "blue");
+				if(this.table[ypos][xpos].html() == "p")
+					this.table[ypos][xpos].css("background-color", "green");
             }
         }
     }

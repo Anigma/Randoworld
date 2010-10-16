@@ -15,6 +15,7 @@
 })*/
 
 bindEvents = function(map) {
+  var self = this;
   $(document).keypress(function(e){
 	  if (e.keyCode) keycode=e.keyCode;
 	  else keycode=e.which;
@@ -22,19 +23,19 @@ bindEvents = function(map) {
 	
 	  if(ch=='w') {
 	    map.message({type:"scrolly",id:game.eid,data:-1});
-	    this.selfMove.fire({direction: DIRECTIONS.NORTH});
+	    map.selfMove.fire({direction: DIRECTIONS.NORTH});
 	  }
 	  else if(ch=='s') {
 	    map.message({type:"scrolly",id:game.eid,data:1});
-	    this.selfMove.fire({direction: DIRECTIONS.SOUTH});
+	    map.selfMove.fire({direction: DIRECTIONS.SOUTH});
 	  }
 	  else if(ch=='a') {
 	    map.message({type:"scrollx",id:game.eid,data:-1});
-	    this.selfMove.fire({direction: DIRECTIONS.WEST});
+	    map.selfMove.fire({direction: DIRECTIONS.WEST});
     }
 	  else if(ch=='d') {
 	    map.message({type:"scrollx",id:game.eid,data:1});
-	    this.selfMove.fire({direction: DIRECTIONS.EAST});
+	    map.selfMove.fire({direction: DIRECTIONS.EAST});
 	  }
   });
     

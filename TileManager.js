@@ -10,6 +10,7 @@ exports.TileManager = function() {
     terrain: [],
     entities: {},
     entityFactory: EntityFactory.EntityFactory(),
+    spawnPoints: [],
     
     generateMap: function() {
       /*var map = Array(MAP_HEIGHT);
@@ -29,6 +30,9 @@ exports.TileManager = function() {
           if (mapdata[c][i] == 2) {
             this.spawnEntity(constants.ENTITY_TYPES.ENEMY, {x: i, y: c});
             mapdata[c][i] = 0;
+          }
+          if (mapdata[c][i] == 3) {
+            spawnPoints.push({x: i, y: c});
           }
         }
       }
@@ -65,6 +69,10 @@ exports.TileManager = function() {
       switch (ENTITY_TYPE) {
         case constants.ENTITY_TYPES.PLAYER:
           newEntity = this.entityFactory.player();
+          if (this.spawnPoints.length != 0) {
+            var spawnId = (Math.floor(Math.random() * 1000) % this.spawnPoints.length);
+            newEntity.location = this.spawnPoints[spawnId];
+          }
           break;
         case constants.ENTITY_TYPES.ENEMY:
           sys.log('Generating enemy');

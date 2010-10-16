@@ -77,12 +77,12 @@ MapView.prototype.scrollTable = function(newx,newy) {
 MapView.prototype.message = function(message) {
     if(message.type == "scrollx") {
         var e = this.entities[message.id];
-        e.x += message.data;
+        e.location.x += message.data;
         this.updateTable();
     }
     if(message.type == "scrolly") {
         var e = this.entities[message.id];
-        e.y += message.data;
+        e.location.y += message.data;
         this.updateTable();
     }
 }
@@ -93,8 +93,8 @@ MapView.prototype.updateTable = function() {
 }
 
 MapView.prototype.centerOnEntity = function(e) {
-    var newx = Math.round(e.x - this.width/2);
-    var newy = Math.round(e.y - this.height/2);
+    var newx = Math.round(e.location.x - this.width/2);
+    var newy = Math.round(e.location.y - this.height/2);
     this.repositionTable(newx,newy);
 }
 
@@ -103,14 +103,14 @@ MapView.prototype.drawEntities = function(entities) {
         this.entities = entities;
         for(var key in entities) {
             var e = entities[key];
-            var ypos = e.y - this.ypos;
-            var xpos = e.x - this.xpos;
+            var ypos = e.location.y - this.ypos;
+            var xpos = e.location.x - this.xpos;
             if(ypos < 0 || ypos >= this.height
                 || xpos < 0 || xpos >= this.width) {
                 // do nothing?
             }
             else {
-                this.table[ypos][xpos].html(e.s);
+                this.table[ypos][xpos].html(e.type);
 		
 		if(this.table[ypos][xpos].html() == "m")
 		    this.table[ypos][xpos].css("background-color", "red");

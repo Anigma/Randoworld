@@ -2,6 +2,9 @@ Game = function() {
   this.sid = null;
   this.eid = null;
   this.name = null;
+  this.healthWidth = 340;
+  this.health = 40;
+  this.damage = 0;
   
   this.mapview = new MapView($('#mini-map'), null, 21, 21);
   
@@ -85,6 +88,11 @@ Game.prototype.addChat = function(name, message) {
   $('#chat_box').append(d);
 }
 
+Game.prototype.takeHit = function(damageAmount) {
+  this.damage += damageAmount;
+  $('#hpbar').width(1.0 * this.healthWidth * (this.health - this.damage) / this.health);
+}
+
 Game.prototype.handlePollResponse = function(data) {
   if (!data.error) {
     switch (data.action) {
@@ -111,6 +119,11 @@ Game.prototype.handlePollResponse = function(data) {
       case 'batch_update':
         this.batchUpdate(data.updates);
         break;
+      case 'attack':
+        if(data.defender_id == game.eid) {
+          this.takeHit(data.damage_amount);
+        }
+        break;
     }
   }
   else {
@@ -123,12 +136,18 @@ Game.prototype.handlePollResponse = function(data) {
 Game.prototype.batchUpdate = function(updates) {
   for(var i = 0; i < updates.length; i++) {
     var data = updates[i];
+
     switch (data.action) {
       case 'entity_moved':
         if (data.entity_id == this.eid) {
           continue;
         }
         this.mapview.message(data.entity_id, data.locationDelta);
+        break;
+      case 'attack':
+        if(data.defender_id == game.eid) {
+          this.takeHit(data.damage_amount);
+        }
         break;
     }
     

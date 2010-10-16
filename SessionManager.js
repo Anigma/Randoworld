@@ -35,6 +35,7 @@ exports.SessionManager = function () {
     broadcast: function(msg) {
       for (var i in this.callbacks)
         this.callbacks[i].simpleJson(200, msg);
+      this.callbacks = [];
     }
   }
   return ret;

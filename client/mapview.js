@@ -110,7 +110,7 @@ MapView.prototype.bindEvents = function() {
 }
 
 MapView.prototype.createTable = function() {
-    var jtable = $(document.createElement('table'))
+    this.jtable = $(document.createElement('table'))
     this.table = [];
     
 	for (var y = 0;y < this.height;y++) {
@@ -121,22 +121,16 @@ MapView.prototype.createTable = function() {
             var jcell = $(document.createElement('td')).addClass('mapcell')
             //jcell.html(this.terrain[y][x]);
             
-			if (y == this.height-1) jcell.addClass('mapcell-bottom');
-			if (x == 0) jcell.addClass('mapcell-left');
+//			if (y == this.height-1) jcell.addClass('mapcell-bottom');
+	//		if (x == 0) jcell.addClass('mapcell-left');
             
             jrow.append(jcell);
             row.push(jcell);
 		}
-        jtable.append(jrow);
+        this.jtable.append(jrow);
         this.table.push(row);
 	}
-	this.container.empty().append(jtable)
-}
-
-MapView.prototype.scrollTable = function(newx,newy) {
-    newx += this.xpos;
-    newy += this.ypos;
-    this.repositionTable(newx,newy);
+	this.container.empty().append(this.jtable)
 }
 
 MapView.prototype.message = function(entity_id, locationDelta) {
@@ -174,15 +168,17 @@ MapView.prototype.centerOnEntity = function(e) {
     this.repositionTable(newx,newy);
 }
 
+MapView.prototype.previousEntities = {};
+
 MapView.prototype.drawEntities = function(entities) {
     if(entities) {
         this.entities = entities;
         for(var key in entities) {
             var e = entities[key];
-            var ypos = e.location.y - this.ypos;
-            var xpos = e.location.x - this.xpos;
-            if(ypos < 0 || ypos >= this.height
-                || xpos < 0 || xpos >= this.width) {
+            var y = e.location.y - this.ypos;
+            var x = e.location.x - this.xpos;
+            if(y < 0 || y >= this.height
+                || x < 0 || x >= this.width) {
                 // do nothing?
             }
             else {
@@ -202,48 +198,156 @@ MapView.prototype.drawEntities = function(entities) {
 				
 				//console.log('one entity drawn');
 
-				this.table[ypos][xpos].text(type);
-				
-				if(this.table[ypos][xpos].text() == "&") {
-					this.table[ypos][xpos].addClass('mapcell-enemy');
+				var pair = this.previousEntities[e.id];
+				if(pair) {
+					
+					this.fillCellByTerrainCoordinate(pair.x,pair.y);
 				}
-				if(this.table[ypos][xpos].text() == "@") {
-					//this.table[ypos][xpos].css("background-color", "blue");
-					this.table[ypos][xpos].addClass('mapcell-player');
-			  }
-				if(this.table[ypos][xpos].text() == "%") {
-					this.table[ypos][xpos].css("background-color", "green");
+				this.previousEntities[e.id] = {"x":e.location.x,"y":e.location.y};
+				// possible source of memory leak if they are never removed?
+				this.table[y][x].text(type);
+				
+				if(this.table[y][x].text() == "&") {
+					//this.table[y][x].addClass('mapcell-enemy');
+					this.table[y][x].css("color", "red");
+				}
+				if(this.table[y][x].text() == "@") {
+					//this.table[y][x].css("background-color", "blue");
+					//this.table[y][x].addClass('mapcell-player');
+					this.table[y][x].css("color", "white");
+				}
+				if(this.table[y][x].text() == "%") {
+					this.table[y][x].css("background-color", "green");
 				}
             }
         }
     }
 }
 
+MapView.prototype.rollViewUp = function() {
+	this.ypos -= 1;
+	
+	var rows = this.jtable.find('tr');
+	var last = rows[this.height - 1];
+	this.jtable.prepend(last);
+
+	last = this.table.pop();
+	this.table.unshift(last);
+
+	for(var i = 0; i < this.width; i++) {
+        this.fillCellByViewCoordinate(i,0);
+	}
+}
+
+
+MapView.prototype.rollViewDown = function() {
+	this.ypos += 1;
+
+	var first = this.jtable.find('tr')[0];
+	this.jtable.append(first);
+
+	first = this.table.shift();
+	this.table.push(first);
+
+	for(var i = 0; i < this.width; i++) {
+		var y = this.height - 1;
+
+        this.fillCellByViewCoordinate(i,y);
+	}
+}
+
+
+MapView.prototype.rollViewLeft = function() {
+	this.xpos -= 1;
+	var jrows = this.jtable.find('tr');
+
+	for(var i = 0; i < this.height; i++) {
+		var last = $(jrows[i]).find('td')[this.width - 1];
+		$(jrows[i]).prepend(last);
+
+		last = this.table[i].pop();
+		this.table[i].unshift(last);
+
+		this.fillCellByViewCoordinate(0,i);
+	}
+}
+
+
+MapView.prototype.rollViewRight = function() {
+	this.xpos += 1;
+	var jrows = this.jtable.find('tr');
+
+	for(var i = 0; i < this.height; i++) {
+		var first = $(jrows[i]).find('td')[0];
+		$(jrows[i]).append(first);
+
+		first = this.table[i].shift();
+		this.table[i].push(first);
+
+		this.fillCellByViewCoordinate(this.width - 1,i);
+	}
+}
+
+MapView.prototype.scrollTable = function(newx,newy) {
+    newx += this.xpos;
+    newy += this.ypos;
+    this.repositionTable(newx,newy);
+}
+
 MapView.prototype.repositionTable = function(xpos, ypos) {
+	if(this.ypos - ypos == 1) {
+		this.rollViewUp();
+		return;
+	}
+	else if(this.ypos - ypos == -1) {
+		this.rollViewDown();
+		return;
+	}
+	else if(this.xpos - xpos == 1) {
+		this.rollViewLeft();
+		return;
+	}
+	else if(this.xpos - xpos == -1) {
+		this.rollViewRight();
+		return;
+	}
     this.xpos = xpos;
     this.ypos = ypos;
     for(var y = 0; y < this.height; y++) {
     
         for(var x = 0; x < this.width; x++) {
-            var terrainY = y + ypos;
-            var terrainX = x + xpos;
-            this.table[y][x].text('');
-            if(terrainY < 0 || terrainY >= this.terrain.length
-                || terrainX < 0 || terrainX >= this.terrain[0].length) {
-                
-                //this.table[y][x].text(BLANK);
-				this.table[y][x].css("background-color", "black");
-                
-            }
-            else {
-                //this.table[y][x].text(this.terrain[terrainY][terrainX]);
-				        if(this.terrain[terrainY][terrainX] == 0)
-					        this.table[y][x].css("background-color", "gray");
-				        if(this.terrain[terrainY][terrainX] == 1)
-					        this.table[y][x].css("background-color", "white");
-                    }
+            this.fillCellByViewCoordinate(x,y);
         }
     }
+}
+
+MapView.prototype.fillCellByViewCoordinate = function(x,y) {
+    var terrainY = y + this.ypos;
+    var terrainX = x + this.xpos;
+	this.table[y][x].text("");
+	if(terrainY < 0 || terrainY >= this.terrain.length
+        || terrainX < 0 || terrainX >= this.terrain[0].length) {
+        //this.table[y][x].text(BLANK);
+		this.table[y][x].css("background-color", "black");
+    }
+    else {
+        //this.table[y][x].text(this.terrain[terrainY][terrainX]);
+		this.table[y][x].css("color", "white");
+		if(this.terrain[terrainY][terrainX] == 0)
+			this.table[y][x].css("background-color", "gray");
+		if(this.terrain[terrainY][terrainX] == 1)
+			this.table[y][x].css("background-color", "white");
+    }
+}
+
+MapView.prototype.fillCellByTerrainCoordinate = function(x,y) {
+    var viewY = y - this.ypos;
+    var viewX = x - this.xpos;
+	this.fillCellByViewCoordinate(viewX,viewY);
+}
+
+MapView.prototype.setTerrain = function(terrain) {
+  this.terrain = terrain;
 }
 
 MapView.prototype.addEntity = function(entity) {

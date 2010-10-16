@@ -42,9 +42,23 @@ Game.prototype.login = function(username) {
 Game.prototype.stateSync = function(data) {
   var terrain = eval(data.terrain);
   var entities = eval('['+data.entities+']')[0];
-  
+
+
   this.mapview.terrain = terrain;
-  this.mapview.entities = entities;
+  this.mapview.entities = entities;/*
+	var t = [];
+	var c = 0;
+	for(var i = 0; i < 80; i++) {
+		var d = [];
+		for(var j = 0; j < 80; j++) {
+			d.push(c);
+		  c++;
+		}
+		t.push(d);
+	}
+
+	
+	this.mapview.terrain = t;*/
   this.mapview.createTable();
 	this.mapview.updateTable();
 }

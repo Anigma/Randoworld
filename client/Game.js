@@ -102,6 +102,7 @@ Game.prototype.handlePollResponse = function(data) {
         this.mapview.addEntity(data.entity);
         break;
       case 'death':
+        if (data.entity_id == this.eid) document.location.href = document.location.href;
         this.mapview.removeEntity(data.entity_id);
         break;
       case 'chat_message':

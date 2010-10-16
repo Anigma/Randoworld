@@ -12,7 +12,10 @@ $(document).ready(function() {
     map = new MapView($('#mini-map'),e, 21, 21);
 
     map.createTable();
-    map.repositionTable(3,2);
+    map.repositionTable(-1,-1);
+    
+    e = [{s:"r",x:0,y:1},{s:"m",x:1,y:2}];
+    map.drawEntities(e);
     
     bindEvents(map);
 })
@@ -39,6 +42,7 @@ bindEvents = function(map) {
 BLANK = "#";
 
 MapView = function(container, terrain, height, width) {
+    this.entities = null;
     this.container = container;
     this.terrain = terrain;
     this.width = width;
@@ -79,6 +83,24 @@ MapView.prototype.scrollTable = function(newx,newy) {
     this.repositionTable(newx,newy);
 }
 
+MapView.prototype.drawEntities = function(entities) {
+    if(entities) {
+        this.entities = entities;
+        for(var i = 0; i < entities.length; i++) {
+            var e = entities[i];
+            var ypos = e.y - this.ypos;
+            var xpos = e.x - this.xpos;
+            if(ypos < 0 || ypos >= this.height
+                || xpos < 0 || xpos >= this.width) {
+                // do nothing?
+            }
+            else {
+                this.table[ypos][xpos].html(e.s);
+            }
+        }
+    }
+}
+
 MapView.prototype.repositionTable = function(xpos, ypos) {
     this.xpos = xpos;
     this.ypos = ypos;
@@ -98,6 +120,7 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
             }
         }
     }
+    this.drawEntities(this.entities);
     
 }
 

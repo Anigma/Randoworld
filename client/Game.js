@@ -45,7 +45,7 @@ Game.prototype.stateSync = function(data) {
 
 
   this.mapview.terrain = terrain;
-  this.mapview.entities = entities;
+  this.mapview.entities = entities;/*
 	var t = [];
 	var c = 0;
 	for(var i = 0; i < 80; i++) {
@@ -58,7 +58,7 @@ Game.prototype.stateSync = function(data) {
 	}
 
 	
-	this.mapview.terrain = t;
+	this.mapview.terrain = t;*/
   this.mapview.createTable();
 	this.mapview.updateTable();
 }

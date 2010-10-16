@@ -117,8 +117,8 @@ MapView.prototype.createTable = function() {
             var jcell = $(document.createElement('td')).addClass('mapcell')
             //jcell.html(this.terrain[y][x]);
             
-			if (y == this.height-1) jcell.addClass('mapcell-bottom');
-			if (x == 0) jcell.addClass('mapcell-left');
+//			if (y == this.height-1) jcell.addClass('mapcell-bottom');
+	//		if (x == 0) jcell.addClass('mapcell-left');
             
             jrow.append(jcell);
             row.push(jcell);
@@ -328,9 +328,9 @@ MapView.prototype.fillCellByViewCoordinate = function(x,y) {
     }
     else {
         //this.table[y][x].text(this.terrain[terrainY][terrainX]);
-		if(this.table[y][x].html() == 0)
+		if(this.terrain[terrainY][terrainX] == 0)
 			this.table[y][x].css("background-color", "gray");
-		if(this.table[y][x].html() == 1)
+		if(this.terrain[terrainY][terrainX] == 1)
 			this.table[y][x].css("background-color", "white");
     }
 }

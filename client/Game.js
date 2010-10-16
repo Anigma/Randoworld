@@ -33,6 +33,9 @@ Game.prototype.stateSync = function(data) {
   var entities = eval('['+data.entities+']')[0];
   
   this.mapview.terrain = terrain;
+  this.mapview.entities = entities;
+	mapview.updateTable();
+  console.log(entities);
 }
 
 Game.prototype.beginPolling = function() {

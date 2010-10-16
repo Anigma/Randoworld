@@ -64,6 +64,17 @@ server.get('/user/act', function(req, res) {
   
   if (params.action) {
     switch(parseInt(params.action)) {
+      case constants.ACTION_TYPES.ATTACK:
+        var retCode = tileManager.damageEntity(params.entity, 5);
+        switch (retCode) {
+          case -1:
+            sessionManager.broadcast({action: 'death', entity_id: params.entity});
+            break;
+          case -2:
+            break;
+        }
+        res.simpleJson(200, {result: 'success'});
+        break;
       case constants.ACTION_TYPES.MOVE:
         switch(parseInt(params.direction)) {
           case constants.DIRECTIONS.NORTH:

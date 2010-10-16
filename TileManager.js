@@ -36,6 +36,20 @@ exports.TileManager = function() {
       this.terrain = mapdata;
     },
     
+    damageEntity: function (entityId, damageAmt) {
+      sys.log(entityId);
+      if (this.entities[entityId]) {
+        this.entities[entityId].health.current -= damageAmt;
+        if (this.entities[entityId].health.current <= 0) {
+          delete this.entities[entityId];
+          return -1;
+        }
+        return this.entities[entityId].health.current;
+      }
+      
+      return -2;
+    },
+    
     spawnEntity: function (ENTITY_TYPE, location) {
       var constants = require('./Constants');
       var EntityFactory = require('./EntityFactory');

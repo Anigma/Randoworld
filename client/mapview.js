@@ -62,6 +62,7 @@ MapView.prototype.bindEvents = function() {
 	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
 	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
+      $(tiles[entity.location.x][entity.location.y - 1]).css('backgroundColor', '#ff0000');
 	    return;
 	  }
 		if(self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) {
@@ -73,6 +74,7 @@ MapView.prototype.bindEvents = function() {
 	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) >= 0 && targetEntityId != null) {
   	  var targetEntity = self.entities[targetEntityId];
   	  $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
+  	  $(tiles[entity.location.x][entity.location.y + 1]).css('backgroundColor', '#ff0000');
   	  return;
 	  }
 		if(self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) {
@@ -84,6 +86,7 @@ MapView.prototype.bindEvents = function() {
 	  if((targetEntityId = self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
 	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
+	    $(tiles[entity.location.x - 1][entity.location.y]).css('backgroundColor', '#ff0000');
 	    return;
 	  }
 		if(self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) {
@@ -95,6 +98,7 @@ MapView.prototype.bindEvents = function() {
 	  if((targetEntityId = self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
 	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
+	    $(tiles[entity.location.x + 1][entity.location.y]).css('backgroundColor', '#ff0000');
 	    return;
 	  }
 		if(self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) {
@@ -244,6 +248,12 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
 
 MapView.prototype.addEntity = function(entity) {
   this.entities[entity.id] = entity;
+  this.updateTable();
+}
+
+MapView.prototype.removeEntity = function(entity_id) {
+  console.log(entity_id);
+  delete this.entities[entity_id];
   this.updateTable();
 }
 

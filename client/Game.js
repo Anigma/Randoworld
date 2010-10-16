@@ -75,6 +75,8 @@ Game.prototype.handlePollResponse = function(data) {
       case 'user_joined':
         this.mapview.addEntity(data.entity);
         break;
+      case 'death':
+        this.mapview.removeEntity(data.entity_id);
     }
   }
   else {

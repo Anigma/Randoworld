@@ -32,7 +32,7 @@ exports.TileManager = function() {
             mapdata[c][i] = 0;
           }
           if (mapdata[c][i] == 3) {
-            spawnPoints.push({x: i, y: c});
+            this.spawnPoints.push({x: i, y: c});
           }
         }
       }

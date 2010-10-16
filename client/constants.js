@@ -1,6 +1,6 @@
 var TERRAIN_TYPES = {
-  WALL: 0,
-  DIRT: 1, 
+  WALL: 1,
+  DIRT: 0, 
   STONE: 2,
   BLANK: 9999
 };

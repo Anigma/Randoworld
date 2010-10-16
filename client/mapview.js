@@ -14,27 +14,40 @@
     bindEvents(map,user);
 })*/
 
+validMove = function(x,y,terrain) {
+	return 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
+}
+
 bindEvents = function(map) {
   $(document).keypress(function(e){
 	  if (e.keyCode) keycode=e.keyCode;
 	  else keycode=e.which;
 	  ch=String.fromCharCode(keycode);
+	  var entity = game.mapview.entities[game.eid];
 	
 	  if(ch=='w') {
-	    map.message({type:"scrolly",id:game.eid,data:-1});
-	    this.selfMove.fire({direction: DIRECTIONS.NORTH});
+		if(validMove(entity.location.x,entity.location.y - 1,game.mapview.terrain)) {
+			map.message({type:"scrolly",id:game.eid,data:-1});
+			this.selfMove.fire({direction: DIRECTIONS.NORTH});
+		}
 	  }
 	  else if(ch=='s') {
-	    map.message({type:"scrolly",id:game.eid,data:1});
-	    this.selfMove.fire({direction: DIRECTIONS.SOUTH});
+		if(validMove(entity.location.x,entity.location.y + 1,game.mapview.terrain)) {
+			map.message({type:"scrolly",id:game.eid,data:1});
+			this.selfMove.fire({direction: DIRECTIONS.SOUTH});
+		}
 	  }
 	  else if(ch=='a') {
-	    map.message({type:"scrollx",id:game.eid,data:-1});
-	    this.selfMove.fire({direction: DIRECTIONS.WEST});
+		if(validMove(entity.location.x - 1,entity.location.y,game.mapview.terrain)) {
+			map.message({type:"scrollx",id:game.eid,data:-1});
+			this.selfMove.fire({direction: DIRECTIONS.WEST});
+		}
     }
 	  else if(ch=='d') {
-	    map.message({type:"scrollx",id:game.eid,data:1});
-	    this.selfMove.fire({direction: DIRECTIONS.EAST});
+		if(validMove(entity.location.x + 1,entity.location.y,game.mapview.terrain)) {
+			map.message({type:"scrollx",id:game.eid,data:1});
+			this.selfMove.fire({direction: DIRECTIONS.EAST});
+		}
 	  }
   });
     

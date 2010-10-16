@@ -12,26 +12,26 @@ $(document).ready(function() {
     map = new MapView($('#mini-map'),e, 21, 21);
 
     map.createTable();
-    map.updateTable(3,2);
+    map.repositionTable(3,2);
     
     bindEvents(map);
 })
 
 bindEvents = function(map) {
     $('#up').click(function(){
-        map.scroll(0,-1)
+        map.scrollTable(0,-1)
 	});
 	
 	$('#down').click(function(){
-        map.scroll(0,1)
+        map.scrollTable(0,1)
 	});
 	
 	$('#left').click(function(){
-        map.scroll(-1,0)
+        map.scrollTable(-1,0)
 	});
 	
 	$('#right').click(function(){
-        map.scroll(1,0)
+        map.scrollTable(1,0)
 	});
     
 }
@@ -73,13 +73,13 @@ MapView.prototype.createTable = function() {
 	this.container.empty().append(jtable)
 }
 
-MapView.prototype.scroll = function(newx,newy) {
+MapView.prototype.scrollTable = function(newx,newy) {
     newx += this.xpos;
     newy += this.ypos;
-    this.updateTable(newx,newy);
+    this.repositionTable(newx,newy);
 }
 
-MapView.prototype.updateTable = function(xpos, ypos) {
+MapView.prototype.repositionTable = function(xpos, ypos) {
     this.xpos = xpos;
     this.ypos = ypos;
     for(var y = 0; y < this.height; y++) {

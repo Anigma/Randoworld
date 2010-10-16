@@ -101,14 +101,12 @@ Game.prototype.handlePollResponse = function(data) {
       case 'user_joined':
         this.mapview.addEntity(data.entity);
         break;
-<<<<<<< HEAD
       case 'death':
         this.mapview.removeEntity(data.entity_id);
-=======
+        break;
       case 'chat_message':
         this.addChat(data.name, data.msg);
         break;
->>>>>>> 4296ba083e72d3d300f6b9ac3c456ac98708a42c
     }
   }
   else {

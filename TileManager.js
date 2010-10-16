@@ -12,15 +12,16 @@ exports.TileManager = function() {
     entityFactory: EntityFactory.EntityFactory(),
     
     generateMap: function() {
-      var map = Array(MAP_HEIGHT);
+      /*var map = Array(MAP_HEIGHT);
       for (var c = 0;c < MAP_HEIGHT;c++) {
         map[c] = Array(MAP_WIDTH);
         for (var i = 0;i < MAP_WIDTH;i++) {
           map[c][i] = Math.floor(Math.random() * 10);
         }
-      }
+      }*/
       
-      this.terrain = map;
+      var mapdata = require('./data/testmap');
+      this.terrain = mapdata.mapdata;
     },
     
     spawnEntity: function (ENTITY_TYPE) {

@@ -12,6 +12,10 @@ Game.prototype.login = function(username) {
   var self = this;
   $.get('/user/join?name='+username, function(data) {
     data = eval('['+data+']')[0];
+    if (data.error) {
+      $('#login-console').append('User name in use<br>');
+      return;
+    }
     self.loginSuccess.fire();
     self.sid = data.session_id;
     self.eid = data.entity_id;

@@ -19,6 +19,16 @@ setInterval(function() {
   sessionManager.broadcast({action: 'state_sync', dump: tileManager.dump()});
 }, 10000);
 
+setInterval(function() {
+  for(key in tileManager.entities) {
+    var e = tileManager.entities[key];
+    if(constants.ENTITY_TYPES.ENEMY == e.type) {
+      sessionManager.broadcast({action: "entity_moved", entity_id: e.id, locationDelta:{x:1,y:0}});
+    }
+  }
+  //sessionManager.broadcast({action: 'state_sync', dump: tileManager.dump()});
+}, 1000);
+
 server.get('/', fu.staticHandler('client/index.htm'));
 server.get('/default.css', fu.staticHandler('client/default.css'));
 server.get('/constants.js', fu.staticHandler('client/constants.js'));

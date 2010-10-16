@@ -196,17 +196,21 @@ MapView.prototype.drawEntities = function(entities) {
 
 				var pair = this.previousEntities[e.id];
 				if(pair) {
+					
 					this.fillCellByTerrainCoordinate(pair.x,pair.y);
 				}
-				this.previousEntities[e.id] = {"x":e.location.x,"y":e.location.y};// possible source of memory leak if they are never removed?
+				this.previousEntities[e.id] = {"x":e.location.x,"y":e.location.y};
+				// possible source of memory leak if they are never removed?
 				this.table[y][x].text(type);
 				
 				if(this.table[y][x].text() == "&") {
-					this.table[y][x].addClass('mapcell-enemy');
+					//this.table[y][x].addClass('mapcell-enemy');
+					this.table[y][x].css("color", "red");
 				}
 				if(this.table[y][x].text() == "@") {
 					//this.table[y][x].css("background-color", "blue");
-					this.table[y][x].addClass('mapcell-player');
+					//this.table[y][x].addClass('mapcell-player');
+					this.table[y][x].css("color", "white");
 				}
 				if(this.table[y][x].text() == "%") {
 					this.table[y][x].css("background-color", "green");
@@ -229,7 +233,6 @@ MapView.prototype.rollViewUp = function() {
 	for(var i = 0; i < this.width; i++) {
         this.fillCellByViewCoordinate(i,0);
 	}
-//draw entities?
 }
 
 
@@ -247,7 +250,6 @@ MapView.prototype.rollViewDown = function() {
 
         this.fillCellByViewCoordinate(i,y);
 	}
-//draw entities?
 }
 
 
@@ -259,12 +261,11 @@ MapView.prototype.rollViewLeft = function() {
 		var last = $(jrows[i]).find('td')[this.width - 1];
 		$(jrows[i]).prepend(last);
 
-		last = this.table.pop();
-		this.table.unshift(last);
+		last = this.table[i].pop();
+		this.table[i].unshift(last);
 
 		this.fillCellByViewCoordinate(0,i);
 	}
-//draw entities?
 }
 
 
@@ -276,12 +277,11 @@ MapView.prototype.rollViewRight = function() {
 		var first = $(jrows[i]).find('td')[0];
 		$(jrows[i]).append(first);
 
-		first = this.table.shift();
-		this.table.push(first);
+		first = this.table[i].shift();
+		this.table[i].push(first);
 
 		this.fillCellByViewCoordinate(this.width - 1,i);
 	}
-//draw entities?
 }
 
 MapView.prototype.scrollTable = function(newx,newy) {
@@ -290,7 +290,7 @@ MapView.prototype.scrollTable = function(newx,newy) {
     this.repositionTable(newx,newy);
 }
 
-MapView.prototype.repositionTable = function(xpos, ypos) {/*
+MapView.prototype.repositionTable = function(xpos, ypos) {
 	if(this.ypos - ypos == 1) {
 		this.rollViewUp();
 		return;
@@ -306,7 +306,7 @@ MapView.prototype.repositionTable = function(xpos, ypos) {/*
 	else if(this.xpos - xpos == -1) {
 		this.rollViewRight();
 		return;
-	}*/
+	}
     this.xpos = xpos;
     this.ypos = ypos;
     for(var y = 0; y < this.height; y++) {
@@ -328,6 +328,7 @@ MapView.prototype.fillCellByViewCoordinate = function(x,y) {
     }
     else {
         //this.table[y][x].text(this.terrain[terrainY][terrainX]);
+		this.table[y][x].css("color", "white");
 		if(this.terrain[terrainY][terrainX] == 0)
 			this.table[y][x].css("background-color", "gray");
 		if(this.terrain[terrainY][terrainX] == 1)
@@ -338,7 +339,7 @@ MapView.prototype.fillCellByViewCoordinate = function(x,y) {
 MapView.prototype.fillCellByTerrainCoordinate = function(x,y) {
     var viewY = y - this.ypos;
     var viewX = x - this.xpos;
-	this.fillCellByViewCoordinate(viewX,viewY);//refactor this!
+	this.fillCellByViewCoordinate(viewX,viewY);
 }
 
 MapView.prototype.setTerrain = function(terrain) {

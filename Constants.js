@@ -11,7 +11,8 @@ exports.ENTITY_TYPES = {
 };
 
 exports.ACTION_TYPES = {
-  MOVE: 0
+  MOVE: 0,
+  ATTACK: 1
 };
 
 exports.DIRECTIONS = {

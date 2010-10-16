@@ -15,6 +15,10 @@ var sessionManager = session.SessionManager();
 var tileManager = tileMgr.TileManager();
 tileManager.generateMap();
 
+setInterval(function() {
+  sessionManager.broadcast({action: 'state_sync', dump: tileManager.dump()});
+}, 10000);
+
 server.get('/', fu.staticHandler('client/index.htm'));
 server.get('/default.css', fu.staticHandler('client/default.css'));
 server.get('/constants.js', fu.staticHandler('client/constants.js'));
@@ -40,6 +44,7 @@ server.get('/user/join', function(req, res) {
       sys.log('Unable to set player entity');
     }
   
+    sessionManager.broadcast({action: 'user_joined', entity: playerEntity});
     res.simpleJson( 200, {session_id: user.sessionId, entity_id: playerEntity.id} );
   }
   else

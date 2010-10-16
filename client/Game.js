@@ -10,6 +10,7 @@ Game = function() {
 
 Game.prototype.bindEvents = function() {
   var self = this;
+  this.mapview.bindEvents();
   this.mapview.selfMove.subscribe(function(direction) {self.commitMove(direction);});
 }
 
@@ -30,6 +31,8 @@ Game.prototype.login = function(username) {
       
       self.bindEvents()
       
+      data = '['+data+']';
+      data = eval(data)[0];
       self.stateSync(data);
       self.beginPolling();
     });
@@ -37,9 +40,6 @@ Game.prototype.login = function(username) {
 }
 
 Game.prototype.stateSync = function(data) {
-  data = '['+data+']';
-  data = eval(data)[0];
-
   var terrain = eval(data.terrain);
   var entities = eval('['+data.entities+']')[0];
 
@@ -61,13 +61,15 @@ Game.prototype.stateSync = function(data) {
 	this.mapview.terrain = t;
   this.mapview.createTable();
 	this.mapview.updateTable();
-	bindEvents(this.mapview);
 }
 
 Game.prototype.beginPolling = function() {
   var self = this;
   if (this.sid) {
-    $.get('/poll?sid='+this.sid, function(data) {self.handlePollResponse(data);}, 'json');
+    $.get('/poll?sid='+this.sid, function(data) {
+      data = eval('['+data+']')[0];
+      self.handlePollResponse(data);
+    }, 'json');
   }
 }
 
@@ -75,9 +77,17 @@ Game.prototype.handlePollResponse = function(data) {
   if (!data.error) {
     switch (data.action) {
       case 'entity_moved':
+        if (data.entity_id == this.eid) {
+          this.beginPolling();
+          return;
+        }
         this.mapview.message(data.entity_id, data.locationDelta);
         break;
       case 'state_sync':
+        this.stateSync(data.dump);
+        break;
+      case 'user_joined':
+        this.mapview.addEntity(data.entity);
         break;
     }
   }

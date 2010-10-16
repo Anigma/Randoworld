@@ -13,47 +13,6 @@
     
     bindEvents(map,user);
 })*/
-
-validMove = function(x,y,terrain) {
-	return 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
-}
-
-bindEvents = function(map) {
-  var self = this;
-  $(document).keypress(function(e){
-	  if (e.keyCode) keycode=e.keyCode;
-	  else keycode=e.which;
-	  ch=String.fromCharCode(keycode);
-	  var entity = game.mapview.entities[game.eid];
-	
-	  if(ch=='w') {
-		if(validMove(entity.location.x,entity.location.y - 1,game.mapview.terrain)) {
-			map.message(game.eid,{x:0,y:-1});
-			map.selfMove.fire({direction: DIRECTIONS.NORTH});
-		}
-	  }
-	  else if(ch=='s') {
-		if(validMove(entity.location.x,entity.location.y + 1,game.mapview.terrain)) {
-			map.message(game.eid,{x:0,y:1});
-			map.selfMove.fire({direction: DIRECTIONS.SOUTH});
-		}
-	  }
-	  else if(ch=='a') {
-		if(validMove(entity.location.x - 1,entity.location.y,game.mapview.terrain)) {
-			map.message(game.eid,{x:-1,y:0});
-			map.selfMove.fire({direction: DIRECTIONS.WEST});
-		}
-    }
-	  else if(ch=='d') {
-		if(validMove(entity.location.x + 1,entity.location.y,game.mapview.terrain)) {
-			map.message(game.eid,{x:1,y:0});
-			map.selfMove.fire({direction: DIRECTIONS.EAST});
-		}
-	  }
-  });
-    
-}
-
 BLANK = "#";
 
 MapView = function(container, terrain, height, width) {
@@ -66,9 +25,84 @@ MapView = function(container, terrain, height, width) {
     this.ypos = 0;
     //2d array of $('td')s
     this.table = null;
-	this.jtable = null;
     
     this.selfMove = new Event();
+}
+
+MapView.prototype.validMove = function(x,y,terrain) {
+
+	var validTerrain = 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
+
+  //console.log('d....');	
+  for (var i in this.entities) {
+    var entity = this.entities[i];
+    //console.log(entity);
+    if (entity.location.x == x && entity.location.y == y) {
+      if (entity.type == ENTITY_TYPES.ENEMY)
+        return entity.id;
+      else
+        return -1;
+    }
+  }
+  
+  if (!validTerrain) return null;
+  else return -1;
+}
+
+MapView.prototype.bindEvents = function() {
+  var self = this;
+  $(document).keypress(function(e){
+	  if (e.keyCode) keycode=e.keyCode;
+	  else keycode=e.which;
+	  ch=String.fromCharCode(keycode);
+	  var entity = game.mapview.entities[game.eid];
+	  var targetEntityId = null;
+	
+	  if(ch=='w') {
+	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) >= 0 && targetEntityId != null) {
+	    var targetEntity = self.entities[targetEntityId];
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
+	    return;
+	  }
+		if(self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) {
+			self.message(game.eid,{x:0,y:-1});
+			self.selfMove.fire({direction: DIRECTIONS.NORTH});
+		}
+	  }
+	  else if(ch=='s') {
+	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) >= 0 && targetEntityId != null) {
+  	  var targetEntity = self.entities[targetEntityId];
+  	  $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
+  	  return;
+	  }
+		if(self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) {
+			self.message(game.eid,{x:0,y:1});
+			self.selfMove.fire({direction: DIRECTIONS.SOUTH});
+		}
+	  }
+	  else if(ch=='a') {
+	  if((targetEntityId = self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
+	    var targetEntity = self.entities[targetEntityId];
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
+	    return;
+	  }
+		if(self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) {
+			self.message(game.eid,{x:-1,y:0});
+			self.selfMove.fire({direction: DIRECTIONS.WEST});
+		}
+    }
+	  else if(ch=='d') {
+	  if((targetEntityId = self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
+	    var targetEntity = self.entities[targetEntityId];
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
+	    return;
+	  }
+		if(self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) {
+			self.message(game.eid,{x:1,y:0});
+			self.selfMove.fire({direction: DIRECTIONS.EAST});
+		}
+	  }
+  });
 }
 
 MapView.prototype.createTable = function() {
@@ -81,7 +115,7 @@ MapView.prototype.createTable = function() {
         
 		for (var x = 0;x < this.width;x++) {
             var jcell = $(document.createElement('td')).addClass('mapcell')
-            jcell.html(this.terrain[y][x]);
+            //jcell.html(this.terrain[y][x]);
             
 			if (y == this.height-1) jcell.addClass('mapcell-bottom');
 			if (x == 0) jcell.addClass('mapcell-left');
@@ -146,31 +180,37 @@ MapView.prototype.drawEntities = function(entities) {
             else {
                 var type;
 				if(game.eid == e.id) {
-					type = "h";
+					type = "@";
 				}
 				else if(e.type == ENTITY_TYPES.PLAYER) {
-					type = "p";
+					type = "%";
 				}
 				else if(e.type == ENTITY_TYPES.ENEMY) {
-					type = "m";
+					type = "&";
 				}
 				else {
 					type = "u";
 				}
+				
+				//console.log('one entity drawn');
 
 				var pair = this.previousEntities[e.id];
 				if(pair) {
 					this.fillCellByTerrainCoordinate(pair.x,pair.y);
 				}
 				this.previousEntities[e.id] = {"x":e.location.x,"y":e.location.y};// possible source of memory leak if they are never removed?
-				this.table[y][x].html(type);
-		
-				if(this.table[y][x].html() == "m")
-					this.table[y][x].css("background-color", "red");
-				else if(this.table[y][x].html() == "h")
-					this.table[y][x].css("background-color", "blue");
-				else if(this.table[y][x].html() == "p")
+				this.table[y][x].text(type);
+				
+				if(this.table[y][x].text() == "&") {
+					this.table[y][x].addClass('mapcell-enemy');
+				}
+				if(this.table[y][x].text() == "@") {
+					//this.table[y][x].css("background-color", "blue");
+					this.table[y][x].addClass('mapcell-player');
+				}
+				if(this.table[y][x].text() == "%") {
 					this.table[y][x].css("background-color", "green");
+				}
             }
         }
     }
@@ -250,7 +290,7 @@ MapView.prototype.scrollTable = function(newx,newy) {
     this.repositionTable(newx,newy);
 }
 
-MapView.prototype.repositionTable = function(xpos, ypos) {
+MapView.prototype.repositionTable = function(xpos, ypos) {/*
 	if(this.ypos - ypos == 1) {
 		this.rollViewUp();
 		return;
@@ -262,7 +302,7 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
 	else if(this.xpos - xpos == 1) {
 		this.rollViewLeft();
 		return;
-	}/*
+	}
 	else if(this.xpos - xpos == -1) {
 		this.rollViewRight();
 		return;
@@ -280,20 +320,18 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
 MapView.prototype.fillCellByViewCoordinate = function(x,y) {
     var terrainY = y + this.ypos;
     var terrainX = x + this.xpos;
-
+	this.table[y][x].text("");
 	if(terrainY < 0 || terrainY >= this.terrain.length
         || terrainX < 0 || terrainX >= this.terrain[0].length) {
-        this.table[y][x].text(BLANK);
+        //this.table[y][x].text(BLANK);
 		this.table[y][x].css("background-color", "black");
     }
     else {
-        this.table[y][x].text(this.terrain[terrainY][terrainX]);
+        //this.table[y][x].text(this.terrain[terrainY][terrainX]);
 		if(this.table[y][x].html() == 0)
 			this.table[y][x].css("background-color", "gray");
-		else if(this.table[y][x].html() == 1)
+		if(this.table[y][x].html() == 1)
 			this.table[y][x].css("background-color", "white");
-		else
-			this.table[y][x].css("background-color", "gray");
     }
 }
 
@@ -305,6 +343,11 @@ MapView.prototype.fillCellByTerrainCoordinate = function(x,y) {
 
 MapView.prototype.setTerrain = function(terrain) {
   this.terrain = terrain;
+}
+
+MapView.prototype.addEntity = function(entity) {
+  this.entities[entity.id] = entity;
+  this.updateTable();
 }
 
 MapView.prototype.init = function() {

@@ -21,10 +21,22 @@ exports.TileManager = function() {
       }*/
       
       var mapdata = require('./data/testmap');
-      this.terrain = mapdata.mapdata;
+      var constants = require('./Constants');
+      
+      mapdata = mapdata.mapdata;
+      for (var c = 0;c < mapdata.length;c++) {
+        for (var i = 0;i < mapdata[c].length;i++) {
+          if (mapdata[c][i] == 2) {
+            this.spawnEntity(constants.ENTITY_TYPES.ENEMY, {x: i, y: c});
+            mapdata[c][i] = 0;
+          }
+        }
+      }
+      
+      this.terrain = mapdata;
     },
     
-    spawnEntity: function (ENTITY_TYPE) {
+    spawnEntity: function (ENTITY_TYPE, location) {
       var constants = require('./Constants');
       var EntityFactory = require('./EntityFactory');
       
@@ -33,12 +45,31 @@ exports.TileManager = function() {
       switch (ENTITY_TYPE) {
         case constants.ENTITY_TYPES.PLAYER:
           newEntity = this.entityFactory.player();
+          break;
+        case constants.ENTITY_TYPES.ENEMY:
+          sys.log('Generating enemy');
+          newEntity = this.entityFactory.enemy(location);
           this.entities[newEntity.id] = newEntity;
           return newEntity;
           break;
         default:
       }
       
+      var end = true;
+      do {
+        end = true;
+        for (var i in this.entities) {
+          sys.log(i);
+          var entity = this.entities[i];
+          if (newEntity.location.x == entity.location.x && newEntity.location.y == entity.location.y) {
+            newEntity.location.x++;
+            end = false;
+          }
+        }
+      }
+      while (!end) 
+
+      this.entities[newEntity.id] = newEntity;      
       return newEntity;
     },
     

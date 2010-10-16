@@ -11,7 +11,8 @@ var ENTITY_TYPES = {
 };
 
 var ACTION_TYPES = {
-  MOVE: 0
+  MOVE: 0,
+  ATTACK: 1
 };
 
 var DIRECTIONS = {

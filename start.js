@@ -75,7 +75,7 @@ nextMove = function(enemy,tileManager) {
     }
   }
   else {
-    res = {};//attck
+    res = {action: "attack", damage_amount: 5, defender_id: minPlayer.id};
   }
   if(res.locationDelta) {
     if(tileManager.terrainPassable(

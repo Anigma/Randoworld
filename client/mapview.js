@@ -15,16 +15,25 @@
 })*/
 
 bindEvents = function(map) {
-    $(document).keypress(function(e){
-	if (e.keyCode) keycode=e.keyCode;
-	else keycode=e.which;
-	ch=String.fromCharCode(keycode);
+  $(document).keypress(function(e){
+	  if (e.keyCode) keycode=e.keyCode;
+	  else keycode=e.which;
+	  ch=String.fromCharCode(keycode);
 	
-	if(ch=='w') 		map.message({type:"scrolly",id:game.eid,data:-1});
-	else if(ch=='s') 	map.message({type:"scrolly",id:game.eid,data:1});
-	else if(ch=='a') 	map.message({type:"scrollx",id:game.eid,data:-1});
-	else if(ch=='d') 	map.message({type:"scrollx",id:game.eid,data:1});
-    });
+	  if(ch=='w') {
+	    map.message({type:"scrolly",id:game.eid,data:-1});
+	    this.
+	  }
+	  else if(ch=='s') {
+	    map.message({type:"scrolly",id:game.eid,data:1});
+	  }
+	  else if(ch=='a') {
+	    map.message({type:"scrollx",id:game.eid,data:-1});
+    }
+	  else if(ch=='d') {
+	    map.message({type:"scrollx",id:game.eid,data:1});
+	  }
+  });
     
 }
 
@@ -40,6 +49,8 @@ MapView = function(container, terrain, height, width) {
     this.ypos = 0;
     //2d array of $('td')s
     this.table = null;
+    
+    this.selfMove = new Event();
 }
 
 MapView.prototype.createTable = function() {

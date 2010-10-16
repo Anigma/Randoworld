@@ -62,7 +62,7 @@ MapView.prototype.bindEvents = function() {
 	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
 	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
-      $(tiles[entity.location.x][entity.location.y - 1]).css('backgroundColor', '#ff0000');
+      $(this.table[entity.location.x][entity.location.y - 1]).css('backgroundColor', '#ff0000');
 	    return;
 	  }
 		if(self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) {
@@ -74,7 +74,7 @@ MapView.prototype.bindEvents = function() {
 	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) >= 0 && targetEntityId != null) {
   	  var targetEntity = self.entities[targetEntityId];
   	  $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
-  	  $(tiles[entity.location.x][entity.location.y + 1]).css('backgroundColor', '#ff0000');
+  	  $(this.table[entity.location.x][entity.location.y + 1]).css('backgroundColor', '#ff0000');
   	  return;
 	  }
 		if(self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) {
@@ -86,7 +86,7 @@ MapView.prototype.bindEvents = function() {
 	  if((targetEntityId = self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
 	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
-	    $(tiles[entity.location.x - 1][entity.location.y]).css('backgroundColor', '#ff0000');
+	    $(this.table[entity.location.x - 1][entity.location.y]).css('backgroundColor', '#ff0000');
 	    return;
 	  }
 		if(self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) {
@@ -98,7 +98,7 @@ MapView.prototype.bindEvents = function() {
 	  if((targetEntityId = self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
 	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
-	    $(tiles[entity.location.x + 1][entity.location.y]).css('backgroundColor', '#ff0000');
+	    $(this.table[entity.location.x + 1][entity.location.y]).css('backgroundColor', '#ff0000');
 	    return;
 	  }
 		if(self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) {
@@ -322,6 +322,7 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
 }
 
 MapView.prototype.fillCellByViewCoordinate = function(x,y) {
+  if(!(0 <= x && x < this.width && 0 <= y && y < this.height)) return;
     var terrainY = y + this.ypos;
     var terrainX = x + this.xpos;
 	this.table[y][x].text("");

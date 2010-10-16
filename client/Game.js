@@ -53,7 +53,10 @@ Game.prototype.stateSync = function(data) {
 Game.prototype.beginPolling = function() {
   var self = this;
   if (this.sid) {
-    $.get('/poll?sid='+this.sid, function(data) {self.handlePollResponse(data);}, 'json');
+    $.get('/poll?sid='+this.sid, function(data) {
+      console.log(data);
+      self.handlePollResponse(data);
+    }, 'json');
   }
 }
 
@@ -61,6 +64,7 @@ Game.prototype.handlePollResponse = function(data) {
   if (!data.error) {
     switch (data.action) {
       case 'entity_moved':
+        return;
         this.mapview.message(data.entity_id, data.locationDelta);
         break;
       case 'state_sync':

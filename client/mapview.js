@@ -1,3 +1,6 @@
+
+    user={};
+    user.entity_id = 1337;
 $(document).ready(function() {
     var c=0;
     var e = [];
@@ -14,27 +17,33 @@ $(document).ready(function() {
     map.createTable();
     map.repositionTable(-1,-1);
     
-    e = [{s:"r",x:0,y:1},{s:"m",x:1,y:2}];
-    map.drawEntities(e);
+    e = {1:{id:1,s:"r",x:0,y:1}, 0:{id:0,s:"m",x:1,y:2},
+        1337 :{id:user.entity_id,s:"H",x:5,y:4}};
+    map.entities = e;
+    map.updateTable();
     
-    bindEvents(map);
+    bindEvents(map,user);
 })
 
-bindEvents = function(map) {
+bindEvents = function(map,user) {
     $('#up').click(function(){
-        map.scrollTable(0,-1)
+        //map.scrollTable(0,-1)
+        map.message({type:"scrolly",id:user.entity_id,data:-1});
 	});
 	
 	$('#down').click(function(){
-        map.scrollTable(0,1)
+        //map.scrollTable(0,1)
+        map.message({type:"scrolly",id:user.entity_id,data:1});
 	});
 	
 	$('#left').click(function(){
-        map.scrollTable(-1,0)
+        //map.scrollTable(-1,0)
+        map.message({type:"scrollx",id:user.entity_id,data:-1});
 	});
 	
 	$('#right').click(function(){
-        map.scrollTable(1,0)
+        //map.scrollTable(1,0)
+        map.message({type:"scrollx",id:user.entity_id,data:1});
 	});
     
 }
@@ -83,11 +92,36 @@ MapView.prototype.scrollTable = function(newx,newy) {
     this.repositionTable(newx,newy);
 }
 
+MapView.prototype.message = function(message) {
+    if(message.type == "scrollx") {
+        var e = this.entities[message.id];
+        e.x += message.data;
+        this.updateTable();
+    }
+    if(message.type == "scrolly") {
+        var e = this.entities[message.id];
+        e.y += message.data;
+        this.updateTable();
+    }
+}
+
+MapView.prototype.updateTable = function() {
+    console.log(this.entities);
+    this.centerOnEntity(this.entities[user.entity_id]);
+    this.drawEntities(this.entities);
+}
+
+MapView.prototype.centerOnEntity = function(e) {
+    var newx = Math.round(e.x - this.width/2);
+    var newy = Math.round(e.y - this.height/2);
+    this.repositionTable(newx,newy);
+}
+
 MapView.prototype.drawEntities = function(entities) {
     if(entities) {
         this.entities = entities;
-        for(var i = 0; i < entities.length; i++) {
-            var e = entities[i];
+        for(var key in entities) {
+            var e = entities[key];
             var ypos = e.y - this.ypos;
             var xpos = e.x - this.xpos;
             if(ypos < 0 || ypos >= this.height
@@ -120,8 +154,6 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
             }
         }
     }
-    this.drawEntities(this.entities);
-    
 }
 
 MapView.prototype.init = function() {

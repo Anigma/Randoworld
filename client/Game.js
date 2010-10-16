@@ -34,12 +34,13 @@ Game.prototype.stateSync = function(data) {
   data = eval(data)[0];
 
   var terrain = eval(data.terrain);
-  var entities = eval('['+data.entities+']')[0];
+  var entities = eval('['+data.entities+']')[0][0];
+  
+  console.log(entities);
   
   this.mapview.terrain = terrain;
   this.mapview.entities = entities;
-	mapview.updateTable();
-  console.log(entities);
+	this.mapview.updateTable();
 }
 
 Game.prototype.beginPolling = function() {

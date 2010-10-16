@@ -23,7 +23,7 @@ Game.prototype.login = function(username) {
     $.get('/map/dump?sid='+self.sid, function(data) {
       self.mapview = new MapView($('#mini-map'), null, 21, 21);
       self.stateSync(data);
-      
+      self.beginPolling();
     });
   }, 'json');
 }
@@ -61,4 +61,6 @@ Game.prototype.handlePollResponse = function(data) {
   else {
     this.handleError(data.error);
   }
+  
+  self.beginPolling();
 }

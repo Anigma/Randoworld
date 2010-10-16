@@ -61,7 +61,7 @@ MapView.prototype.bindEvents = function() {
 	  if(ch=='w') {
 	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
-	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'entity='+targetEntityId);
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
 	    return;
 	  }
 		if(self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) {
@@ -72,7 +72,7 @@ MapView.prototype.bindEvents = function() {
 	  else if(ch=='s') {
 	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) >= 0 && targetEntityId != null) {
   	  var targetEntity = self.entities[targetEntityId];
-  	  $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'entity='+targetEntityId);
+  	  $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
   	  return;
 	  }
 		if(self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) {
@@ -83,7 +83,7 @@ MapView.prototype.bindEvents = function() {
 	  else if(ch=='a') {
 	  if((targetEntityId = self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
-	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'entity='+targetEntityId);
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
 	    return;
 	  }
 		if(self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) {
@@ -94,7 +94,7 @@ MapView.prototype.bindEvents = function() {
 	  else if(ch=='d') {
 	  if((targetEntityId = self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
-	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'entity='+targetEntityId);
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'&entity='+targetEntityId);
 	    return;
 	  }
 		if(self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) {

@@ -38,6 +38,13 @@ server.get('/Event.js', fu.staticHandler('client/Event.js'));
 server.get('/Game.js', fu.staticHandler('client/Game.js'));
 server.get('/jquery.js', fu.staticHandler('client/jquery.js'));
 
+server.get('/user/leave', function(req, res) {
+  var params = url.parse(req.url, true).query;
+  if(params.eid) {
+    sessionManager.unregisterUser(params.eid);
+  }
+});
+
 server.get('/user/join', function(req, res) {
   var params = url.parse(req.url, true).query;
   
@@ -129,6 +136,18 @@ server.get('/user/act', function(req, res) {
   }
 });
 
+server.get('/chat',function(req, res) {//eid,msg
+  var params = url.parse(req.url, true).query;
+  var u;
+  for(var id in sessionManager.users) {
+    u = sessionManager.users[id];
+    if(u.entity.id == params.eid) {
+      break;
+    }
+  }
+  sessionManager.broadcast({action: 'chat_message', name: u.name, msg: params.msg});
+  res.simpleText(200, '');
+});
 
 
 server.get('/poll', function(req, res) {

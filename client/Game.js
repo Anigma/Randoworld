@@ -39,6 +39,13 @@ Game.prototype.login = function(username) {
   }, 'json');
 }
 
+Game.prototype.logout = function() {
+  var self = this;
+  $.get('/user/leave?eid=' + game.eid, function(data) {
+    // say goodbye!
+  });
+}
+
 Game.prototype.stateSync = function(data) {
   var terrain = eval(data.terrain);
   var entities = eval('['+data.entities+']')[0];
@@ -73,6 +80,11 @@ Game.prototype.beginPolling = function() {
   }
 }
 
+Game.prototype.addChat = function(name, message) {
+  var d = $(document.createElement('div')).text(name + ": " + message);
+  $('#chat_box').append(d);
+}
+
 Game.prototype.handlePollResponse = function(data) {
   if (!data.error) {
     switch (data.action) {
@@ -89,8 +101,14 @@ Game.prototype.handlePollResponse = function(data) {
       case 'user_joined':
         this.mapview.addEntity(data.entity);
         break;
+<<<<<<< HEAD
       case 'death':
         this.mapview.removeEntity(data.entity_id);
+=======
+      case 'chat_message':
+        this.addChat(data.name, data.msg);
+        break;
+>>>>>>> 4296ba083e72d3d300f6b9ac3c456ac98708a42c
     }
   }
   else {

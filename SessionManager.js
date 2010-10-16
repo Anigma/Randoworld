@@ -1,3 +1,5 @@
+
+var sys = require('sys');
 exports.SessionManager = function () {
 
   /*
@@ -28,6 +30,15 @@ exports.SessionManager = function () {
       this.users[this.nextUserId++] = newUser;
       
       return newUser;
+    },
+
+    unregisterUser: function(eid) {
+      for(id in this.users) {
+        sys.log("unregister" + this.users[id].entity.id);
+        if(this.users[id].entity.id == eid) {
+          delete this.users[id];
+        }
+      }
     },
     
     validateSID: function(sid) {

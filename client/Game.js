@@ -3,9 +3,14 @@ Game = function() {
   this.eid = null;
   this.name = null;
   
-  this.mapview = null;
+  this.mapview = new MapView($('#mini-map'), null, 21, 21);
   
   this.loginSuccess = new Event();
+}
+
+Game.prototype.bindEvents = function() {
+  var self = this;
+  this.mapview.selfMove.subscribe(function(direction) {self.commitMove(direction);});
 }
 
 Game.prototype.login = function(username) {
@@ -22,6 +27,9 @@ Game.prototype.login = function(username) {
     
     $.get('/map/dump?sid='+self.sid, function(data) {
       self.mapview = new MapView($('#mini-map'), null, 21, 21);
+      
+      self.bindEvents()
+      
       self.stateSync(data);
       self.beginPolling();
     });
@@ -62,5 +70,11 @@ Game.prototype.handlePollResponse = function(data) {
     this.handleError(data.error);
   }
   
-  self.beginPolling();
+  this.beginPolling();
+}
+
+Game.prototype.commitMove = function(direction) {
+  direction = direction.direction;
+
+  $.get('/user/act?sid='+this.sid+'&action='+ACTION_TYPES.MOVE+'&direction='+direction);  
 }

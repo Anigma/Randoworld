@@ -101,7 +101,6 @@ MapView.prototype.message = function(message) {
 }
 
 MapView.prototype.updateTable = function() {
-	console.log(this.entities);
     this.centerOnEntity(this.entities[game.eid]);
     this.drawEntities(this.entities);
 }

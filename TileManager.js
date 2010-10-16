@@ -43,12 +43,14 @@ exports.TileManager = function() {
     },
     
     updateEntityLocation: function(entityId, locationDelta) {
+      var sys = require('sys');
       if (this.entities[entityId]) {
         var entity = this.entities[entityId]
         entity.location.x += locationDelta.x;
         entity.location.y += locationDelta.y;
         
         this.entities[entityId] = entity;
+        sys.log('efefe');
         return true;
       }
       

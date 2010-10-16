@@ -57,28 +57,39 @@ server.get('/user/act', function(req, res) {
     res.simpleJson(200, {error: 'INVALID_SESSION'});
   }
   
-  sys.log(user.id);
   if (params.action) {
     switch(parseInt(params.action)) {
       case constants.ACTION_TYPES.MOVE:
         switch(parseInt(params.direction)) {
           case constants.DIRECTIONS.NORTH:
-            tileManager.updateEntityLocation(user.entityId, {x: -1, y: 0});
+            if (!tileManager.updateEntityLocation(user.entity.id, {x: 0, y: -1})) {
+              res.simpleJson(200, {error: 'CANNOT_UPDATE_ENTITY'});
+              return;
+            }
             sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: -1, y: 0} });
             res.simpleJson(200, {result: 'success'});
             break;
           case constants.DIRECTIONS.SOUTH:
-            tileManager.updateEntityLocation(user.entityId, {x: 1, y: 0});
+            if (!tileManager.updateEntityLocation(user.entity.id, {x: 0, y: 1})) {
+              res.simpleJson(200, {error: 'CANNOT_UPDATE_ENTITY'});
+              return;
+            }
             sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 1, y: 0} });
             res.simpleJson(200, {result: 'success'});
             break;
           case constants.DIRECTIONS.EAST:
-            tileManager.updateEntityLocation(user.entityId, {x: 0, y: 1});
+            if (!tileManager.updateEntityLocation(user.entity.id, {x: 1, y: 0})) {
+              res.simpleJson(200, {error: 'CANNOT_UPDATE_ENTITY'});
+              return;
+            }
             sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 0, y: 1} });
             res.simpleJson(200, {result: 'success'});
             break;
           case constants.DIRECTIONS.WEST:
-            tileManager.updateEntityLocation(user.entityId, {x: 0, y: -1});
+            if (!tileManager.updateEntityLocation(user.entity.id, {x: -1, y: 0})) {
+              res.simpleJson(200, {error: 'CANNOT_UPDATE_ENTITY'});
+              return;
+            }
             sessionManager.broadcast({action: 'entity_moved', entity_id: user.entity.id, locationDelta: {x: 0, y: -1} });
             res.simpleJson(200, {result: 'success'});
             break;
@@ -109,7 +120,6 @@ server.get('/poll', function(req, res) {
     res.simpleJson(200, {error: 'USER_DOES_NOT_EXIST'});
   }
   else {
-    sys.log(user.id);
     sessionManager.beginPoll(user.id, res);
   }
 });

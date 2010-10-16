@@ -35,6 +35,12 @@ exports.TileManager = function() {
       
       this.terrain = mapdata;
     },
+
+    terrainPassable: function(x,y) {
+      var constants = require('./Constants');
+    	return 0 <= x && x < this.terrain[0].length 
+        && 0 <= y && y < this.terrain.length && this.terrain[y][x] != constants.TERRAIN_TYPES.WALL;
+    },
     
     damageEntity: function (entityId, damageAmt) {
       sys.log(entityId);

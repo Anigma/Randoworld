@@ -20,14 +20,77 @@ setInterval(function() {
 }, 10000);
 
 setInterval(function() {
+  var updates = []
   for(key in tileManager.entities) {
     var e = tileManager.entities[key];
     if(constants.ENTITY_TYPES.ENEMY == e.type) {
-      sessionManager.broadcast({action: "entity_moved", entity_id: e.id, locationDelta:{x:1,y:0}});
+      var update = nextMove(e,tileManager);
+      if(update) {
+        updates.push(update);
+      }
     }
   }
-  //sessionManager.broadcast({action: 'state_sync', dump: tileManager.dump()});
+  sessionManager.broadcast({action: 'batch_update', "updates": updates});
 }, 1000);
+
+nextMove = function(enemy,tileManager) {
+  var min = 1000000000;
+  var minPlayer;
+  for(var id in tileManager.entities) {
+    var player = tileManager.entities[id];
+    if(player.type == constants.ENTITY_TYPES.PLAYER) {
+      var temp = Math.sqrt(Math.pow(enemy.location.x - player.location.x,2) + Math.pow(enemy.location.y - player.location.y,2));
+      if(!minPlayer) {
+        minPlayer = player;
+        min = temp;
+      }
+      else if(temp < min) {
+        minPlayer = player;
+        min = temp;
+      }
+    }
+  }
+  if(!minPlayer) return null;
+  if(min > 8) return null;
+  var res = {action: "entity_moved", entity_id: enemy.id};
+  if(enemy.location.x < minPlayer.location.x - 1) {
+    res.locationDelta = {x:1,y:0}
+  }
+  else if(enemy.location.x > minPlayer.location.x + 1) {
+    res.locationDelta = {x:-1,y:0}
+  }
+  else if(enemy.location.y < minPlayer.location.y - 1) {
+    res.locationDelta = {x:0,y:1}
+  }
+  else if(enemy.location.y > minPlayer.location.y + 1) {
+    res.locationDelta = {x:0,y:-1}
+  }
+  else if(Math.abs(enemy.location.y - minPlayer.location.y) == 1 
+    && Math.abs(enemy.location.x - minPlayer.location.x) == 1) {
+    if(enemy.location.x > minPlayer.location.x) {
+      res.locationDelta = {x:-1,y:0}
+    }
+    else {
+      res.locationDelta = {x:1,y:0}
+    }
+  }
+  else {
+    res = {};//attck
+  }
+  if(res.locationDelta) {
+    if(tileManager.terrainPassable(
+      enemy.location.x + res.locationDelta.x,
+      enemy.location.y + res.locationDelta.y)) {
+
+      enemy.location.x += res.locationDelta.x;
+      enemy.location.y += res.locationDelta.y;
+    }
+    else {
+      res = null;
+    }
+  }
+  return res;
+}
 
 server.get('/', fu.staticHandler('client/index.htm'));
 server.get('/default.css', fu.staticHandler('client/default.css'));

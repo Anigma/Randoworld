@@ -107,6 +107,9 @@ Game.prototype.handlePollResponse = function(data) {
       case 'chat_message':
         this.addChat(data.name, data.msg);
         break;
+      case 'batch_update':
+        this.batchUpdate(data.updates);
+        break;
     }
   }
   else {
@@ -114,6 +117,21 @@ Game.prototype.handlePollResponse = function(data) {
   }
   
   this.beginPolling();
+}
+
+Game.prototype.batchUpdate = function(updates) {
+  for(var i = 0; i < updates.length; i++) {
+    var data = updates[i];
+    switch (data.action) {
+      case 'entity_moved':
+        if (data.entity_id == this.eid) {
+          continue;
+        }
+        this.mapview.message(data.entity_id, data.locationDelta);
+        break;
+    }
+    
+  }
 }
 
 Game.prototype.commitMove = function(direction) {

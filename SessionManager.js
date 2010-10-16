@@ -8,7 +8,7 @@ exports.SessionManager = function () {
    
   var ret = {
     users: {},
-    responses: {},
+    callbacks: [],
     nextUserId: 0,
     
     registerUser: function(username) {
@@ -17,18 +17,24 @@ exports.SessionManager = function () {
         timestamp: (new Date()).getTime()
       }
       
+      for (var id in this.users) {
+        if (this.users[id].name == username)
+          return -1;
+      }
+      
       this.users[this.nextUserId] = newUser;
       
       return this.nextUserId++;
     },
     
-    beginPoll: function(user_id, req) {
-      responses[user_id] = req;
+    beginPoll: function(user_id, res) {
+      this.callbacks.push(res);
     },
     
     // msg better be a valid json object lol
     broadcast: function(msg) {
-      req.simpleJSON(200, msg);
+      for (var i in this.callbacks)
+        this.callbacks[i].simpleJson(200, msg);
     }
   }
   return ret;

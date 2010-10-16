@@ -19,6 +19,7 @@ validMove = function(x,y,terrain) {
 }
 
 bindEvents = function(map) {
+  var self = this;
   $(document).keypress(function(e){
 	  if (e.keyCode) keycode=e.keyCode;
 	  else keycode=e.which;
@@ -28,25 +29,25 @@ bindEvents = function(map) {
 	  if(ch=='w') {
 		if(validMove(entity.location.x,entity.location.y - 1,game.mapview.terrain)) {
 			map.message({type:"scrolly",id:game.eid,data:-1});
-			this.selfMove.fire({direction: DIRECTIONS.NORTH});
+			map.selfMove.fire({direction: DIRECTIONS.NORTH});
 		}
 	  }
 	  else if(ch=='s') {
 		if(validMove(entity.location.x,entity.location.y + 1,game.mapview.terrain)) {
 			map.message({type:"scrolly",id:game.eid,data:1});
-			this.selfMove.fire({direction: DIRECTIONS.SOUTH});
+			map.selfMove.fire({direction: DIRECTIONS.SOUTH});
 		}
 	  }
 	  else if(ch=='a') {
 		if(validMove(entity.location.x - 1,entity.location.y,game.mapview.terrain)) {
 			map.message({type:"scrollx",id:game.eid,data:-1});
-			this.selfMove.fire({direction: DIRECTIONS.WEST});
+			map.selfMove.fire({direction: DIRECTIONS.WEST});
 		}
     }
 	  else if(ch=='d') {
 		if(validMove(entity.location.x + 1,entity.location.y,game.mapview.terrain)) {
 			map.message({type:"scrollx",id:game.eid,data:1});
-			this.selfMove.fire({direction: DIRECTIONS.EAST});
+			map.selfMove.fire({direction: DIRECTIONS.EAST});
 		}
 	  }
   });

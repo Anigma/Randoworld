@@ -4,6 +4,7 @@ $(document).ready(function(){
             $.get('/user/join?name='+$('#name-input').attr('value'), function(data) {
                 if (!data.error) {
                     $('#login-console').append('Login successful');
+		    $('#login-overlay').fadeOut();
                 }
             }, 'JSON');
         }

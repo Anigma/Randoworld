@@ -55,7 +55,7 @@ div {
 	width: 265px;
 	height: 265px;
 
-	opacity: 0.2;
+	opacity: 1.0;
 }
 
 #map-output {
@@ -159,12 +159,12 @@ div {
 }
 
 .mapcell-player {
-    background: blue;
+    background-color: #0000ff;
     color: white;
 }
 
 .mapcell-enemy {
-  color: red;
+  color: magenta;
 }
 
 #overlay {
@@ -175,7 +175,7 @@ div {
     width: 265px;
     height: 265px;
     
-    opacity: 0.2;
+    opacity: 1.0;
 }
 
 #map-output {
@@ -195,7 +195,7 @@ div {
     color: #ffffff;
     z-index: 9001;
 
-    opacity: 0.2;
+    opacity: 1.0;
 }
 
 #unitframe {

@@ -13,24 +13,6 @@
     
     bindEvents(map,user);
 })*/
-
-validMove = function(x,y,terrain) {
-
-	var validTerrain = 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
-
-  console.log('d....');	
-  for (var i in this.entities) {
-    var entity = this.entities[i];
-    console.log(entity);
-    if (entity.location.x == x && entity.location.y == y)
-      return false;
-  }
-  
-  return validTerrain;
-}
-
-
-
 BLANK = "#";
 
 MapView = function(container, terrain, height, width) {
@@ -51,19 +33,20 @@ MapView.prototype.validMove = function(x,y,terrain) {
 
 	var validTerrain = 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
 
-  console.log('d....');	
+  //console.log('d....');	
   for (var i in this.entities) {
     var entity = this.entities[i];
-    console.log(entity);
+    //console.log(entity);
     if (entity.location.x == x && entity.location.y == y) {
-      if (entity.type == ENTITY_TYPES.ENEMY;
+      if (entity.type == ENTITY_TYPES.ENEMY)
         return entity.id;
       else
-        return false;
+        return -1;
     }
   }
   
-  return validTerrain;
+  if (!validTerrain) return null;
+  else return -1;
 }
 
 MapView.prototype.bindEvents = function() {
@@ -76,9 +59,10 @@ MapView.prototype.bindEvents = function() {
 	  var targetEntityId = null;
 	
 	  if(ch=='w') {
-	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) >= 0) {
+	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
-	    $.get('/user/act?action=attack&sid='+game.sid+'entity='+targetEntityId);
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'entity='+targetEntityId);
+	    return;
 	  }
 		if(self.validMove(entity.location.x,entity.location.y - 1,self.terrain)) {
 			self.message(game.eid,{x:0,y:-1});
@@ -86,9 +70,10 @@ MapView.prototype.bindEvents = function() {
 		}
 	  }
 	  else if(ch=='s') {
-	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) >= 0) {
+	  if((targetEntityId = self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) >= 0 && targetEntityId != null) {
   	  var targetEntity = self.entities[targetEntityId];
-  	  $.get('/user/act?action=attack&sid='+game.sid+'entity='+targetEntityId);
+  	  $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'entity='+targetEntityId);
+  	  return;
 	  }
 		if(self.validMove(entity.location.x,entity.location.y + 1,self.terrain)) {
 			self.message(game.eid,{x:0,y:1});
@@ -96,9 +81,10 @@ MapView.prototype.bindEvents = function() {
 		}
 	  }
 	  else if(ch=='a') {
-	  if((targetEntityId = self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) >= 0) {
+	  if((targetEntityId = self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
-	    $.get('/user/act?action=attack&sid='+game.sid+'entity='+targetEntityId);
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'entity='+targetEntityId);
+	    return;
 	  }
 		if(self.validMove(entity.location.x - 1,entity.location.y,self.terrain)) {
 			self.message(game.eid,{x:-1,y:0});
@@ -106,9 +92,10 @@ MapView.prototype.bindEvents = function() {
 		}
     }
 	  else if(ch=='d') {
-	  if((targetEntityId = self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) >= 0) {
+	  if((targetEntityId = self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) >= 0 && targetEntityId != null) {
 	    var targetEntity = self.entities[targetEntityId];
-	    $.get('/user/act?action=attack&sid='+game.sid+'entity='+targetEntityId);
+	    $.get('/user/act?action='+ACTION_TYPES.ATTACK+'&sid='+game.sid+'entity='+targetEntityId);
+	    return;
 	  }
 		if(self.validMove(entity.location.x + 1,entity.location.y,self.terrain)) {
 			self.message(game.eid,{x:1,y:0});

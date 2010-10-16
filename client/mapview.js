@@ -22,16 +22,19 @@ bindEvents = function(map) {
 	
 	  if(ch=='w') {
 	    map.message({type:"scrolly",id:game.eid,data:-1});
-	    this.
+	    this.selfMove.fire({direction: DIRECTIONS.NORTH});
 	  }
 	  else if(ch=='s') {
 	    map.message({type:"scrolly",id:game.eid,data:1});
+	    this.selfMove.fire({direction: DIRECTIONS.SOUTH});
 	  }
 	  else if(ch=='a') {
 	    map.message({type:"scrollx",id:game.eid,data:-1});
+	    this.selfMove.fire({direction: DIRECTIONS.WEST});
     }
 	  else if(ch=='d') {
 	    map.message({type:"scrollx",id:game.eid,data:1});
+	    this.selfMove.fire({direction: DIRECTIONS.EAST});
 	  }
   });
     

@@ -194,6 +194,8 @@ div {
     background-color: #000000;
     color: #ffffff;
     z-index: 9001;
+
+    opacity: 0.2;
 }
 
 #unitframe {

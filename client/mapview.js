@@ -1,7 +1,6 @@
+user={};
+user.entity_id = 1337;
 
-
-    user={};
-    user.entity_id = 1337;
 $(document).ready(function() {
     
     map = new MapView($('#mini-map'),mapdata, 21, 21);

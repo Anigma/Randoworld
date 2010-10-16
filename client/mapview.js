@@ -9,18 +9,29 @@ $(document).ready(function() {
         e.push(t);
     }
     
-    map = new MapView($('#mini-map'),e, 21, 21);
+    map = new MapView($('#mini-map'),mapdata, 21, 21);
 
     map.createTable();
     map.repositionTable(-1,-1);
     
-    e = [{s:"r",x:0,y:1},{s:"m",x:1,y:2}];
-    map.drawEntities(e);
+    mapdata = [{s:"p",x:0,y:1},{s:"m",x:1,y:2}];
+    map.drawEntities(mapdata);
     
     bindEvents(map);
 })
 
 bindEvents = function(map) {
+    $(document).keypress(function(e){
+	if (e.keyCode) keycode=e.keyCode;
+	else keycode=e.which;
+	ch=String.fromCharCode(keycode);
+	
+	if(ch=='w') 		map.scrollTable(0,-1) //up
+	else if(ch=='s') 	map.scrollTable(0,1) //down
+	else if(ch=='a') 	map.scrollTable(-1,0) //left
+	else if(ch=='d') 	map.scrollTable(1,0) //right
+    });
+    
     $('#up').click(function(){
         map.scrollTable(0,-1)
 	});
@@ -96,6 +107,11 @@ MapView.prototype.drawEntities = function(entities) {
             }
             else {
                 this.table[ypos][xpos].html(e.s);
+		
+		if(this.table[ypos][xpos].html() == "m")
+		    this.table[ypos][xpos].css("background-color", "red");
+		if(this.table[ypos][xpos].html() == "p")
+		    this.table[ypos][xpos].css("background-color", "green");
             }
         }
     }
@@ -113,10 +129,15 @@ MapView.prototype.repositionTable = function(xpos, ypos) {
                 || terrainX < 0 || terrainX >= this.terrain[0].length) {
                 
                 this.table[y][x].html(BLANK);
+		this.table[y][x].css("background-color", "black");
                 
             }
             else {
                 this.table[y][x].html(this.terrain[terrainY][terrainX]);
+		if(this.table[y][x].html() == 0)
+		    this.table[y][x].css("background-color", "gray");
+		if(this.table[y][x].html() == 1)
+		    this.table[y][x].css("background-color", "white");
             }
         }
     }

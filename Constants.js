@@ -1,3 +1,10 @@
+exports.TERRAIN_TYPES = {
+  WALL: 0,
+  DIRT: 1, 
+  STONE: 2,
+  BLANK: 9999
+};
+
 exports.ENTITY_TYPES = {
   PLAYER: 0,
   ENEMY: 1

@@ -13,8 +13,11 @@ exports.SessionManager = function () {
     
     registerUser: function(username) {
       var newUser = {
+        id: this.nextUserId,
         name: username,
-        timestamp: (new Date()).getTime()
+        timestamp: (new Date()).getTime(),
+        sessionId: Math.floor(Math.random() * 1000000000),
+        entity: null
       }
       
       for (var id in this.users) {
@@ -22,13 +25,42 @@ exports.SessionManager = function () {
           return -1;
       }
       
-      this.users[this.nextUserId] = newUser;
+      this.users[this.nextUserId++] = newUser;
       
-      return this.nextUserId++;
+      return newUser;
     },
     
-    beginPoll: function(user_id, res) {
-      this.callbacks.push(res);
+    validateSID: function(sid) {
+      for (var id in this.users) {
+        if (this.users[id].sessionId == sid)
+          return this.users[id];
+      }
+      
+      return false;
+    },
+    
+    setUserEntity: function(userId, entity) {
+      var userExists = false;
+      for (var id in this.users) {
+        if (id == userId)
+          userExists = true;
+      }
+      if (!userExists) return false;
+      
+      this.users[userId].entity = entity;
+      return true;
+    },
+    
+    beginPoll: function(userId, res) {
+      var userExists = false;
+      for (var id in this.users) {
+        if (id == userId)
+          userExists = true;
+      }
+      if (userExists)
+        this.callbacks.push(res);
+      else
+        return -1;
     },
     
     // msg better be a valid json object lol

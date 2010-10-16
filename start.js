@@ -152,6 +152,9 @@ server.get('/user/act', function(req, res) {
             break;
           case -2:
             break;
+          default:
+            sessionManager.broadcast({action: 'attack', damage_amount: 5, defender_id: retCode});
+            break;
         }
         res.simpleJson(200, {result: 'success'});
         break;

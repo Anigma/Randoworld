@@ -33,15 +33,13 @@ MapView.prototype.validMove = function(x,y,terrain) {
 
 	var validTerrain = 0 <= x && x < terrain[0].length && 0 <= y && y < terrain.length && terrain[y][x] != TERRAIN_TYPES.WALL;
 
-  //console.log('d....');	
   for (var i in this.entities) {
     var entity = this.entities[i];
-    //console.log(entity);
     if (entity.location.x == x && entity.location.y == y) {
-      if (entity.type == ENTITY_TYPES.ENEMY)
+      //if (entity.type == ENTITY_TYPES.ENEMY)
         return entity.id;
-      else
-        return -1;
+      //else
+      //  return -1;
     }
   }
   

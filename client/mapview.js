@@ -102,8 +102,8 @@ MapView.prototype.scrollTable = function(newx,newy) {
 
 MapView.prototype.message = function(entity_id, locationDelta) {
     if (this.entities[entity_id]) {
-      this.entities[entity_id].x += locationDelta.x;
-      this.entities[entity_id].y += locationDelta.y;
+      this.entities[entity_id].location.x += locationDelta.x;
+      this.entities[entity_id].location.y += locationDelta.y;
       
       this.updateTable();
       return true;

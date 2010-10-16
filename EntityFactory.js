@@ -11,10 +11,8 @@ exports.EntityFactory = function () {
         type: constants.ENTITY_TYPES.PLAYER,
         location: {x: 0, y: 0}
       };
-      
       return entity;
     }
-    
   };
   
   return ret;

@@ -17,6 +17,7 @@ tileManager.generateMap();
 
 server.get('/', fu.staticHandler('client/index.htm'));
 server.get('/default.css', fu.staticHandler('client/default.css'));
+server.get('/constants.js', fu.staticHandler('client/constants.js'));
 server.get('/actions.js', fu.staticHandler('client/actions.js'));
 server.get('/mapview.js', fu.staticHandler('client/mapview.js'));
 server.get('/Event.js', fu.staticHandler('client/Event.js'));
